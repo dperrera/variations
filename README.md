@@ -1,6 +1,6 @@
 # Variations
 
-A React component library that enables rapid prototyping and exploration of UI variations. This library makes it easy to create and manage multiple versions of your UI components, perfect for prototyping.
+A React component library that enables rapid prototyping and exploration of UI variations.
 
 ## Installation
 
@@ -12,21 +12,35 @@ yarn add variations
 pnpm add variations
 ```
 
-## Features
+## Setup
 
-- 🎨 Create multiple variations of UI components
-- 🔄 Easy switching between variations
-- 📱 Perfect for prototyping responsive designs
-- ⚡️ Built with React and TypeScript
-- 🎯 Zero configuration required
-- 🌳 Hierarchical variation support
+### Provider and Controls Setup
+
+Wrap your application with the `VariationsProvider` at the root level. The `VariationControls` component provides a UI for switching between different variations in your app. You can style it or position it as needed.:
+
+```tsx
+"use client";
+import { VariationsProvider, VariationsControls } from "variations";
+
+function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <VariationsProvider>
+      {children}
+      <VariationsControls position="bottom-center" />
+    </VariationsProvider>
+  );
+}
+```
+
+Note for Next.js users: Variations requires the `"use client"` directive to be present in the root component.
 
 ## Usage
 
 ### Basic Example
 
 ```tsx
-"use client"; // Required for Next.js app router
+"use client";
+
 import { Variations, Variation } from "variations";
 
 export default function MyComponent() {
@@ -69,31 +83,15 @@ You can create nested variations to explore combinations of different components
 </Variations>
 ```
 
-### Using Groups
-
-You can organize variations into groups for better organization:
-
-```tsx
-<Variations label="Components">
-  <Variation
-    group="buttons"
-    groupLabel="Button Styles"
-    label="Primary"
-  >
-    <button>Primary Button</button>
-  </Variation>
-
-  <Variation
-    group="buttons"
-    groupLabel="Button Styles"
-    label="Secondary"
-  >
-    <button>Secondary Button</button>
-  </Variation>
-</Variations>
-```
-
 ## API Reference
+
+### VariationsProvider
+
+The root component that manages a set of variations.
+
+Props:
+
+- `children`: React nodes containing Variation components
 
 ### Variations Component
 
@@ -112,26 +110,17 @@ The component that wraps each variation.
 Props:
 
 - `label` (string): The display name for this variation
-- `group` (string, optional): Group identifier for related variations
-- `groupLabel` (string, optional): Display name for the group
-- `id` (string, optional): Custom identifier for the variation
-- `parentId` (string, optional): ID of the parent variation for nested variations
 - `children`: React nodes to render when this variation is active
 
-### useVariations Hook
+### Controls Component
 
-A hook to programmatically interact with variations.
+A pre-built UI component that provides a control panel for managing variations.
 
-```tsx
-const { activeIds, setActiveId, variations, activeTree } = useVariations();
-```
+Props:
 
-Returns:
+- `position` (string, optional): The position of the control panel. Possible values are `bottom-center`, `bottom-left`, `bottom-right`, `middle-left`, `middle-right`, `top-center`, `top-left`, `top-right`. Defaults to `bottom-center`
 
-- `activeIds`: Map of active variation IDs by group
-- `setActiveId`: Function to programmatically set the active variation
-- `variations`: Map of all registered variations
-- `activeTree`: Current tree structure of active variations
+The Controls component automatically displays all registered variations and allows users to switch between them. It updates in real-time as variations are added or removed from your app. You can show and hide the controls by clicking on the Variations icon or by using the keyboard shortcut `Option + v`. The controls support keyboard navigation or clicking on the controls to switch between variations.
 
 ## Contributing
 
