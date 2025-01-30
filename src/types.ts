@@ -13,16 +13,10 @@ export type VariationsPosition =
 export interface VariationsProps {
   label: string;
   children: ReactNode;
-  parentId?: string;
-  group?: string;
   isRoot?: boolean;
 }
 
 export interface VariationProps {
-  group?: string;
   label: string;
-  id?: string;
-  groupLabel?: string;
-  parentId?: string;
   children: ReactNode;
 }

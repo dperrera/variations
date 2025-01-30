@@ -5,6 +5,7 @@ import { useVariations } from "./VariationsProvider";
 
 interface VariationsControlsProps {
   position?: VariationsPosition;
+  minimizedByDefault?: boolean;
 }
 
 const VariationGroup = ({
@@ -152,8 +153,9 @@ const VariationGroup = ({
 
 export function VariationsControls({
   position = "bottom-right",
+  minimizedByDefault = true,
 }: VariationsControlsProps) {
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(minimizedByDefault);
   const { activeIds, setActiveId, variations } = useVariations();
 
   // Group variations by group
