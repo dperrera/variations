@@ -1,2 +1,2 @@
-import { VariationProps } from './types';
-export declare function Variation({ group, label, id, groupLabel, parentId, children, }: VariationProps): import("react/jsx-runtime").JSX.Element | null;
+import { InternalVariationProps } from './internal-types';
+export declare function Variation({ group, label, id, groupLabel, parentId, children, }: InternalVariationProps): import("react").JSX.Element | null;

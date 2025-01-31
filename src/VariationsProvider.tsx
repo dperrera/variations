@@ -5,33 +5,12 @@ import {
   useContext,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
-
-interface VariationNode {
-  id: string;
-  group: string;
-  children: Map<string, VariationNode>;
-}
-
-export type { VariationNode };
-
-interface VariationsContextType {
-  activeIds: Map<string, string>;
-  setActiveId: (group: string, variationId: string) => void;
-  registerVariation: (
-    group: string,
-    id: string,
-    label: string,
-    groupLabel: string,
-    parentId?: string
-  ) => void;
-  variations: Map<
-    string,
-    { group: string; label: string; groupLabel: string; parentId?: string }
-  >;
-  activeTree: VariationNode | null;
-}
+import {
+  VariationNode,
+  VariationsContextType,
+  VariationsProviderProps,
+} from "./internal-types";
 
 export const VariationsContext = createContext<VariationsContextType | null>(
   null
@@ -44,10 +23,6 @@ export const useVariations = () => {
   }
   return context;
 };
-
-interface VariationsProviderProps {
-  children: ReactNode;
-}
 
 export function VariationsProvider({ children }: VariationsProviderProps) {
   const [localActiveIds, setLocalActiveIds] = useState<Map<string, string>>(

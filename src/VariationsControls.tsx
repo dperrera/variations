@@ -53,107 +53,109 @@ const VariationGroup = ({
           ))}
         </select>
       </div>
-      <style jsx>{`
-        .variation-group {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-          padding: 0 0 0 10px;
-          gap: 4px;
-          overflow: hidden;
-        }
-        .variation-group:last-child {
-          border-bottom-left-radius: 8px;
-          border-bottom-right-radius: 8px;
-        }
-        .variation-group:hover {
-          background: rgba(0, 0, 0, 0.03);
-        }
-
-        .variation-title {
-          flex: 1;
-          font-size: 11px;
-          font-weight: 500;
-          color: #888;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
-        }
-
-        .variations-selects {
-          display: flex;
-          gap: 8px;
-        }
-
-        .variation-select {
-          width: 100px;
-          flex: 1 0 50px;
-          padding: 4px 24px 4px 8px;
-          font-size: 11px;
-          color: #111;
-          background: transparent;
-          cursor: pointer;
-          outline: none;
-          appearance: none;
-          border-radius: 4px;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
-          background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L4 6L7 3' stroke='%23999999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 8px center;
-          background-size: 8px auto;
-          transition: border-color 0.1s ease;
-        }
-
-        .variation-select option {
-          text-overflow: ellipsis;
-          overflow: hidden;
-        }
-
-        .variation-select:focus {
-          background: rgba(0, 0, 0, 1);
-          color: #ffffff;
-          background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L4 6L7 3' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 8px center;
-          background-size: 8px auto;
-        }
-
-        @media (prefers-color-scheme: dark) {
+      <style>
+        {`
+          .variation-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0 0 10px;
+            gap: 4px;
+            overflow: hidden;
+          }
+          .variation-group:last-child {
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+          }
           .variation-group:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.03);
           }
 
           .variation-title {
-            color: #999;
+            flex: 1;
+            font-size: 11px;
+            font-weight: 500;
+            color: #888;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+
+          .variations-selects {
+            display: flex;
+            gap: 8px;
           }
 
           .variation-select {
-            color: #fff;
+            width: 100px;
+            flex: 1 0 50px;
+            padding: 4px 24px 4px 8px;
+            font-size: 11px;
+            color: #111;
+            background: transparent;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            border-radius: 4px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L4 6L7 3' stroke='%23999999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 8px auto;
+            transition: border-color 0.1s ease;
           }
 
           .variation-select option {
-            background: rgb(28, 28, 30);
-            color: #fff;
+            text-overflow: ellipsis;
+            overflow: hidden;
           }
 
           .variation-select:focus {
-            background-color: #ffffff;
-            color: #111;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L4 6L7 3' stroke='%23111111' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background: rgba(0, 0, 0, 1);
+            color: #ffffff;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L4 6L7 3' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 8px auto;
           }
-        }
-      `}</style>
+
+          @media (prefers-color-scheme: dark) {
+            .variation-group:hover {
+              background: rgba(255, 255, 255, 0.05);
+            }
+
+            .variation-title {
+              color: #999;
+            }
+
+            .variation-select {
+              color: #fff;
+              background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L4 6L7 3' stroke='%23999999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            }
+
+            .variation-select option {
+              background: rgb(28, 28, 30);
+              color: #fff;
+            }
+
+            .variation-select:focus {
+              background-color: #ffffff;
+              color: #111;
+              background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L4 6L7 3' stroke='%23111111' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };
 
 export function VariationsControls({
   position = "bottom-right",
-  minimizedByDefault = true,
+  minimizedByDefault = false,
 }: VariationsControlsProps) {
   const [isMinimized, setIsMinimized] = useState(minimizedByDefault);
   const { activeIds, setActiveId, variations } = useVariations();
@@ -221,45 +223,47 @@ export function VariationsControls({
           <div className="variations-empty-text">
             Add a <code>{`<Variations>`}</code> component!
           </div>
-          <style jsx>{`
-            .variations-empty {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              padding: 20px 16px;
-              text-align: center;
-              gap: 4px;
-            }
-
-            .variations-empty-title {
-              font-size: 13px;
-              font-weight: 500;
-              color: #666;
-            }
-            .variations-empty-text {
-              font-size: 11px;
-              color: #999;
-            }
-            code {
-              font-family: var(--font-geist-mono);
-              font-size: 11px;
-              padding: 1px 4px;
-              background: rgba(0, 0, 0, 0.03);
-              border-radius: 4px;
-            }
-            @media (prefers-color-scheme: dark) {
-              .variations-empty-title {
-                color: #999;
+          <style>
+            {`
+              .variations-empty {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 20px 16px;
+                text-align: center;
+                gap: 4px;
               }
-              .variations-empty-text {
+
+              .variations-empty-title {
+                font-size: 13px;
+                font-weight: 500;
                 color: #666;
               }
-              code {
-                background: rgba(255, 255, 255, 0.1);
+              .variations-empty-text {
+                font-size: 11px;
+                color: #999;
               }
-            }
-          `}</style>
+              code {
+                font-family: var(--font-geist-mono);
+                font-size: 11px;
+                padding: 1px 4px;
+                background: rgba(0, 0, 0, 0.03);
+                border-radius: 4px;
+              }
+              @media (prefers-color-scheme: dark) {
+                .variations-empty-title {
+                  color: #999;
+                }
+                .variations-empty-text {
+                  color: #666;
+                }
+                code {
+                  background: rgba(255, 255, 255, 0.1);
+                }
+              }
+            `}
+          </style>
         </div>
       );
     }
@@ -353,190 +357,216 @@ export function VariationsControls({
           </>
         )}
       </div>
-      <style jsx>{`
-        .variations-controls {
-          font-family: system-ui, -apple-system, sans-serif;
-          position: fixed;
-          ${position.includes("right")
-            ? "right: 16px;"
-            : position.includes("center")
-            ? "left: 50%; transform: translateX(-50%);"
-            : "left: 16px;"}
-          ${position.includes("bottom")
-            ? "bottom: 16px;"
-            : position.includes("middle")
-            ? "top: 50%; transform: translateY(-50%);"
-            : "top: 16px;"}
-          ${position.includes("middle") && position.includes("right")
-            ? "transform: translateY(-50%);"
-            : ""}
-          ${position.includes("middle") && position.includes("left")
-            ? "transform: translateY(-50%);"
-            : ""}
-          ${position.includes("center") && position.includes("bottom")
-            ? "transform: translateX(-50%);"
-            : ""}
-          ${position.includes("center") && position.includes("top")
-            ? "transform: translateX(-50%);"
-            : ""}
-          width: 280px;
-          height: auto;
-          max-height: calc(100vh - 32px);
-          z-index: 100;
-          background: rgba(255, 255, 255);
-          border-radius: 10px;
-          overflow: auto;
-          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05),
-            0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
-          padding: 0;
-        }
-
-        .variations-controls.minimized {
-          width: 32px;
-          height: 32px;
-          padding: 0;
-          border-radius: 16px;
-          background: white;
-          ${position.includes("right")
-            ? "right: 16px;"
-            : position.includes("center")
-            ? "left: 50%; transform: translateX(-50%);"
-            : "left: 16px;"}
-          ${position.includes("bottom")
-            ? "bottom: 16px;"
-            : position.includes("middle")
-            ? "top: 50%; transform: translateY(-50%);"
-            : "top: 16px;"}
-          ${position.includes("middle") && position.includes("right")
-            ? "transform: translateY(-50%);"
-            : ""}
-          ${position.includes("middle") && position.includes("left")
-            ? "transform: translateY(-50%);"
-            : ""}
-          ${position.includes("center") && position.includes("bottom")
-            ? "transform: translateX(-50%);"
-            : ""}
-          ${position.includes("center") && position.includes("top")
-            ? "transform: translateX(-50%);"
-            : ""}
-        }
-
-        .variations-circle {
-          width: 32px;
-          height: 32px;
-          padding: 0;
-          border: none;
-          background: none;
-          color: #666;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .variations-circle:focus {
-          background: rgba(0, 0, 0, 1);
-          color: #ffffff;
-          border-radius: 4px;
-          outline: none;
-        }
-
-        .variations-header {
-          background: rgba(255, 255, 255, 0.6);
-          position: sticky;
-          top: 0;
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-          padding: 2px 2px 0 10px;
-          backdrop-filter: blur(4px);
-        }
-
-        .variations-header-title {
-          font-family: system-ui, -apple-system, sans-serif;
-          font-size: 8px;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          line-height: 12px;
-          font-weight: 700;
-          color: #999;
-          display: flex;
-          align-items: center;
-        }
-
-        .variations-header-toggle {
-          background: none;
-          border: none;
-          color: #999;
-          cursor: pointer;
-          font-size: 16px;
-          line-height: 0px;
-          font-weight: 500;
-          padding: 0;
-          padding-bottom: 2px;
-          width: 24px;
-          height: 24px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 2px;
-          border-top-right-radius: 8px;
-        }
-        .variations-header-toggle:hover {
-          color: #111111;
-        }
-        .variations-header-toggle:focus {
-          background: #111111;
-          color: #ffffff;
-          outline: none;
-        }
-
-        .variation-groups {
-          display: flex;
-          flex-direction: column;
-          padding: 2px;
-        }
-
-        @media (prefers-color-scheme: dark) {
+      <style>
+        {`
           .variations-controls {
-            background: rgba(28, 28, 30, 1);
-            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2),
-              0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+            font-family: system-ui, -apple-system, sans-serif;
+            position: fixed;
+            ${
+              position.includes("right")
+                ? "right: 16px;"
+                : position.includes("center")
+                ? "left: 50%; transform: translateX(-50%);"
+                : "left: 16px;"
+            }
+            ${
+              position.includes("bottom")
+                ? "bottom: 16px;"
+                : position.includes("middle")
+                ? "top: 50%; transform: translateY(-50%);"
+                : "top: 16px;"
+            }
+            ${
+              position.includes("middle") && position.includes("right")
+                ? "transform: translateY(-50%);"
+                : ""
+            }
+            ${
+              position.includes("middle") && position.includes("left")
+                ? "transform: translateY(-50%);"
+                : ""
+            }
+            ${
+              position.includes("center") && position.includes("bottom")
+                ? "transform: translateX(-50%);"
+                : ""
+            }
+            ${
+              position.includes("center") && position.includes("top")
+                ? "transform: translateX(-50%);"
+                : ""
+            }
+            width: 280px;
+            height: auto;
+            max-height: calc(100vh - 32px);
+            z-index: 100;
+            background: rgba(255, 255, 255);
+            border-radius: 10px;
+            overflow: auto;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05),
+              0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 0;
           }
 
           .variations-controls.minimized {
-            background: rgb(28, 28, 30);
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border-radius: 16px;
+            background: white;
+            ${
+              position.includes("right")
+                ? "right: 16px;"
+                : position.includes("center")
+                ? "left: 50%; transform: translateX(-50%);"
+                : "left: 16px;"
+            }
+            ${
+              position.includes("bottom")
+                ? "bottom: 16px;"
+                : position.includes("middle")
+                ? "top: 50%; transform: translateY(-50%);"
+                : "top: 16px;"
+            }
+            ${
+              position.includes("middle") && position.includes("right")
+                ? "transform: translateY(-50%);"
+                : ""
+            }
+            ${
+              position.includes("middle") && position.includes("left")
+                ? "transform: translateY(-50%);"
+                : ""
+            }
+            ${
+              position.includes("center") && position.includes("bottom")
+                ? "transform: translateX(-50%);"
+                : ""
+            }
+            ${
+              position.includes("center") && position.includes("top")
+                ? "transform: translateX(-50%);"
+                : ""
+            }
           }
 
           .variations-circle {
-            color: #fff;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: none;
+            background: none;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
 
           .variations-circle:focus {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 1);
             color: #ffffff;
             border-radius: 4px;
             outline: none;
           }
 
           .variations-header {
-            background: rgba(28, 28, 30, 0.9);
+            background: rgba(255, 255, 255, 0.6);
+            position: sticky;
+            top: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 2px 0 10px;
+            backdrop-filter: blur(4px);
+          }
+
+          .variations-header-title {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            line-height: 12px;
+            font-weight: 700;
+            color: #999;
+            display: flex;
+            align-items: center;
           }
 
           .variations-header-toggle {
+            background: none;
+            border: none;
             color: #999;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 0px;
+            font-weight: 500;
+            padding: 0;
+            padding-bottom: 2px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            border-top-right-radius: 8px;
           }
           .variations-header-toggle:hover {
-            color: #ffffff;
-          }
-          .variations-header-toggle:focus {
-            background: white;
             color: #111111;
           }
-        }
-      `}</style>
+          .variations-header-toggle:focus {
+            background: #111111;
+            color: #ffffff;
+            outline: none;
+          }
+
+          .variation-groups {
+            display: flex;
+            flex-direction: column;
+            padding: 2px;
+          }
+
+          @media (prefers-color-scheme: dark) {
+            .variations-controls {
+              background: rgba(28, 28, 30, 1);
+              box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2),
+                0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+            }
+
+            .variations-controls.minimized {
+              background: rgb(28, 28, 30);
+            }
+
+            .variations-circle {
+              color: #fff;
+            }
+
+            .variations-circle:focus {
+              background: rgba(255, 255, 255, 0.1);
+              color: #ffffff;
+              border-radius: 4px;
+              outline: none;
+            }
+
+            .variations-header {
+              background: rgba(28, 28, 30, 0.9);
+            }
+
+            .variations-header-toggle {
+              color: #999;
+            }
+            .variations-header-toggle:hover {
+              color: #ffffff;
+            }
+            .variations-header-toggle:focus {
+              background: white;
+              color: #111111;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 }

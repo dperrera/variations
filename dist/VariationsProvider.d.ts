@@ -1,13 +1,4 @@
-import { ReactNode } from 'react';
-interface VariationNode {
-    id: string;
-    group: string;
-    children: Map<string, VariationNode>;
-}
-export type { VariationNode };
-export declare const VariationsContext: any;
-export declare const useVariations: () => any;
-interface VariationsProviderProps {
-    children: ReactNode;
-}
-export declare function VariationsProvider({ children }: VariationsProviderProps): import("react/jsx-runtime").JSX.Element;
+import { VariationsContextType, VariationsProviderProps } from './internal-types';
+export declare const VariationsContext: import('react').Context<VariationsContextType | null>;
+export declare const useVariations: () => VariationsContextType;
+export declare function VariationsProvider({ children }: VariationsProviderProps): import("react").JSX.Element;

@@ -1,17 +1,20 @@
 "use client";
 import React, { useContext, useEffect, useMemo } from "react";
-import { VariationsContext } from "./VariationsProvider";
 import { Variation } from "./Variation";
+import { VariationsContext } from "./VariationsProvider";
+import {
+  InternalVariationProps,
+  InternalVariationsProps,
+} from "./internal-types";
 import { createSafeId } from "./utils";
-import type { VariationsProps, VariationProps } from "./types";
 
 const ROOT_GROUP_ID = "root-variations";
 
 function isVariationElement(
   child: React.ReactNode
-): child is React.ReactElement<VariationProps> {
+): child is React.ReactElement<InternalVariationProps> {
   return (
-    React.isValidElement<VariationProps>(child) &&
+    React.isValidElement<InternalVariationProps>(child) &&
     child.type === Variation &&
     typeof child.props.label === "string"
   );
@@ -23,7 +26,7 @@ export function Variations({
   children,
   parentId,
   group: providedGroup,
-}: VariationsProps) {
+}: InternalVariationsProps) {
   const context = useContext(VariationsContext);
   if (!context) {
     throw new Error(
@@ -89,7 +92,8 @@ export function Variations({
             parentId,
           });
         } else if (child.type === Variations) {
-          const variationsChild = child as React.ReactElement<VariationsProps>;
+          const variationsChild =
+            child as React.ReactElement<InternalVariationsProps>;
           const activeVariationId = activeIds.get(groupId);
           const nestedGroupId = createSafeId(variationsChild.props.label);
 

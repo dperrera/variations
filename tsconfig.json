@@ -4,13 +4,13 @@
     "declaration": true,
     "declarationDir": "dist",
     "strict": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "moduleResolution": "node",
-    "target": "ES6",
+    "target": "ESNext",
     "module": "ESNext",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["styled-jsx/types"]
+    "types": ["react", "styled-jsx"]
   },
   "include": ["src"]
 }
