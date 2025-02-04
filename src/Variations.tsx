@@ -5,7 +5,7 @@ import { VariationsContext } from "./VariationsProvider";
 import type { VariationProps, VariationsProps } from "./types";
 import { createSafeId } from "./utils";
 
-const ROOT_GROUP_ID = "root-variations";
+const ROOT_GROUP_ID = "root";
 
 type InternalVariationProps = VariationProps & {
   group?: string;

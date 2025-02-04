@@ -88,7 +88,13 @@ export function VariationsProvider({
       const variations = params.get("var");
       if (variations) {
         try {
-          setLocalActiveIds(new Map(JSON.parse(variations)));
+          // Parse the URL-friendly format "group.id_group.id_group.id"
+          const pairs = variations.split("_").map((pair) => {
+            const [group, id] = pair.split(".");
+            if (!group || !id) throw new Error("Invalid format");
+            return [group, id] as [string, string];
+          });
+          setLocalActiveIds(new Map(pairs));
         } catch (e) {
           // Invalid format, ignore
           setLocalActiveIds(new Map());
@@ -103,7 +109,7 @@ export function VariationsProvider({
 
   // Build the active variations tree
   const activeTree = useMemo(() => {
-    const rootId = localActiveIds.get("root-variations");
+    const rootId = localActiveIds.get("root");
     if (!rootId) return null;
 
     const buildNode = (id: string, group: string): VariationNode => {
@@ -129,7 +135,7 @@ export function VariationsProvider({
       return node;
     };
 
-    const root = buildNode(rootId, "root-variations");
+    const root = buildNode(rootId, "root");
     return root;
   }, [localActiveIds, localVariations]);
 
@@ -139,9 +145,9 @@ export function VariationsProvider({
         const next = new Map(prev);
         next.set(group, id);
         // Clear all child variations when changing layout
-        if (group === "root-variations") {
+        if (group === "root") {
           Array.from(prev.keys()).forEach((key) => {
-            if (key !== "root-variations") next.delete(key);
+            if (key !== "root") next.delete(key);
           });
         } else {
           // Clear child variations of the changed group

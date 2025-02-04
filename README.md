@@ -52,7 +52,7 @@ http://localhost:3000/?var=group.id_group.id_group.id
 For example:
 
 ```
-http://localhost:3000/?var=root-variations.login-page_login-form.option-2_email-form.show
+http://localhost:3000/?var=root.login-page_login-form.option-2_email-form.show
 ```
 
 Where:

@@ -148,9 +148,11 @@ const VariationGroup = ({
   );
 };
 
-interface Props
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariationsControlsProps {}
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  position?: VariationsPosition;
+  minimizedByDefault?: boolean;
+  className?: string;
+}
 
 export function VariationsControls({
   position = "bottom-right",
@@ -159,7 +161,28 @@ export function VariationsControls({
   ...props
 }: Props) {
   const [isMinimized, setIsMinimized] = useState(minimizedByDefault);
+  const [showCopied, setShowCopied] = useState(false);
   const { activeIds, setActiveId, variations } = useVariations();
+
+  const handleCopyLink = () => {
+    const params = new URLSearchParams(window.location.search);
+    const variations = Array.from(activeIds.entries());
+    if (variations.length > 0) {
+      const urlValue = variations
+        .map(([group, id]) => `${group}.${id}`)
+        .join("_");
+      params.set("var", urlValue);
+    } else {
+      params.delete("var");
+    }
+    const newSearch = params.toString();
+    const url =
+      window.location.href.split("?")[0] + (newSearch ? `?${newSearch}` : "");
+    navigator.clipboard.writeText(url).then(() => {
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+    });
+  };
 
   // Group variations by group
   const variationGroups = React.useMemo(() => {
@@ -184,19 +207,19 @@ export function VariationsControls({
     const processedGroups = new Set<string>();
 
     // First add root variations
-    if (variationGroups.has("root-variations")) {
-      const variations = variationGroups.get("root-variations")!;
+    if (variationGroups.has("root")) {
+      const variations = variationGroups.get("root")!;
       groups.push(
         <VariationGroup
-          key="root-variations"
-          group="root-variations"
+          key="root"
+          group="root"
           variations={variations}
           activeIds={activeIds}
           setActiveId={setActiveId}
           isMinimized={isMinimized}
         />
       );
-      processedGroups.add("root-variations");
+      processedGroups.add("root");
     }
 
     // Then add all other groups that have active IDs
@@ -348,13 +371,62 @@ export function VariationsControls({
                 </svg>
                 Variations
               </div>
-              <button
-                className="variations-header-toggle"
-                onClick={() => setIsMinimized(true)}
-                tabIndex={isMinimized ? -1 : 0}
-              >
-                ×
-              </button>
+              <div className="variations-header-actions">
+                <button
+                  className="variations-header-button"
+                  onClick={handleCopyLink}
+                  title="Copy link to clipboard"
+                  tabIndex={isMinimized ? -1 : 0}
+                >
+                  {showCopied ? (
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M20 6L9 17L4 12"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
+                </button>
+                <button
+                  className="variations-header-toggle"
+                  onClick={() => setIsMinimized(true)}
+                  tabIndex={isMinimized ? -1 : 0}
+                >
+                  ×
+                </button>
+              </div>
             </div>
 
             <div className="variation-groups">{allGroups}</div>
@@ -499,6 +571,37 @@ export function VariationsControls({
             align-items: center;
           }
 
+          .variations-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          }
+
+          .variations-header-button {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            transition: color 0.2s ease;
+          }
+
+          .variations-header-button:hover {
+            color: #111111;
+          }
+
+          .variations-header-button:focus {
+            background: #111111;
+            color: #ffffff;
+            outline: none;
+          }
+
           .variations-header-toggle {
             background: none;
             border: none;
@@ -565,6 +668,17 @@ export function VariationsControls({
               color: #ffffff;
             }
             .variations-header-toggle:focus {
+              background: white;
+              color: #111111;
+            }
+
+            .variations-header-button {
+              color: #999;
+            }
+            .variations-header-button:hover {
+              color: #ffffff;
+            }
+            .variations-header-button:focus {
               background: white;
               color: #111111;
             }
