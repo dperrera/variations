@@ -25,3 +25,37 @@ export interface VariationsControlsProps {
   position?: VariationsPosition;
   minimizedByDefault?: boolean;
 }
+
+export interface VariationNode<
+  TGroup extends string = string,
+  TId extends string = string
+> {
+  id: TId;
+  group: TGroup;
+  children: Map<TGroup, VariationNode<TGroup, TId>>;
+}
+
+export interface VariationsContextType<
+  TGroup extends string = string,
+  TId extends string = string
+> {
+  /** Map of group IDs to their active variation IDs */
+  activeIds: Map<TGroup, TId>;
+  /** Set the active variation ID for a group */
+  setActiveId: (group: TGroup, variationId: TId) => void;
+  /** Internal method to register a variation */
+  registerVariation: (
+    group: TGroup,
+    id: TId,
+    label: string,
+    groupLabel: string,
+    parentId?: TId
+  ) => void;
+  /** Map of variation IDs to their metadata */
+  variations: Map<
+    TId,
+    { group: TGroup; label: string; groupLabel: string; parentId?: TId }
+  >;
+  /** Tree representation of active variations */
+  activeTree: VariationNode<TGroup, TId> | null;
+}

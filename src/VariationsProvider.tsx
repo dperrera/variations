@@ -7,23 +7,55 @@ import {
   useMemo,
   useState,
 } from "react";
-import {
-  VariationNode,
-  VariationsContextType,
-  VariationsProviderProps,
-} from "./internal-types";
+import type { VariationNode, VariationsContextType } from "./types";
+import type { VariationsProviderProps } from "./internal-types";
 
-export const VariationsContext = createContext<VariationsContextType | null>(
-  null
-);
+export const VariationsContext = createContext<VariationsContextType<
+  string,
+  string
+> | null>(null);
 
-export const useVariations = () => {
+export function useVariations<
+  TGroup extends string = string,
+  TId extends string = string
+>(): VariationsContextType<TGroup, TId> {
   const context = useContext(VariationsContext);
   if (!context) {
     throw new Error("useVariations must be used within a VariationsProvider");
   }
-  return context;
-};
+  return context as unknown as VariationsContextType<TGroup, TId>;
+}
+
+export function useVariation(group: string) {
+  const { activeIds, setActiveId, variations } = useVariations();
+  const activeId = activeIds.get(group);
+
+  // Get all variations for this group
+  const groupVariations = useMemo(() => {
+    return Array.from(variations.entries())
+      .filter(([, variation]) => variation.group === group)
+      .map(([id, { label }]) => ({
+        id,
+        label,
+      }));
+  }, [variations, group]);
+
+  // Get the currently active variation
+  const active = useMemo(() => {
+    if (!activeId) return null;
+    const variation = variations.get(activeId);
+    return variation ? { id: activeId, label: variation.label } : null;
+  }, [activeId, variations]);
+
+  return {
+    /** The currently active variation */
+    active,
+    /** Set the active variation by ID */
+    setActive: (id: string) => setActiveId(group, id),
+    /** All available variations for this group */
+    variations: groupVariations,
+  };
+}
 
 export function VariationsProvider({
   children,

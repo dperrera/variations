@@ -153,6 +153,93 @@ Props:
 
 The Controls component automatically displays all registered variations and allows users to switch between them. It updates in real-time as variations are added or removed from your app. You can show and hide the controls by clicking on the Variations icon or by using the keyboard shortcut `Option + v`. The controls support keyboard navigation or clicking on the controls to switch between variations.
 
+### Hooks
+
+#### useVariation
+
+A hook for managing a single variation group. This is the recommended way to programmatically interact with variations.
+
+```tsx
+const { active, setActive, variations } = useVariation("theme");
+
+// active: { id: string; label: string } | null
+// The currently active variation or null if none is selected
+console.log(active?.label); // e.g. "Light Theme"
+
+// variations: Array<{ id: string; label: string }>
+// All available variations for this group
+console.log(variations); // e.g. [{ id: 'light', label: 'Light Theme' }, ...]
+
+// setActive: (id: string) => void
+// Function to change the active variation
+setActive("dark");
+```
+
+Example usage with a select element:
+
+```tsx
+function ThemeSelector() {
+  const { active, setActive, variations } = useVariation("theme");
+
+  return (
+    <select
+      value={active?.id || ""}
+      onChange={(e) => setActive(e.target.value)}
+    >
+      {variations.map(({ id, label }) => (
+        <option
+          key={id}
+          value={id}
+        >
+          {label}
+        </option>
+      ))}
+    </select>
+  );
+}
+```
+
+#### useVariations
+
+A lower-level hook that provides full access to the variations context. Use this if you need more control over variations or need to work with multiple groups at once.
+
+```tsx
+const {
+  // Map of group IDs to their active variation IDs
+  activeIds,
+
+  // Function to set the active variation for a group
+  setActiveId,
+
+  // Map of all registered variations
+  variations,
+
+  // Tree representation of active variations
+  activeTree,
+} = useVariations();
+
+// Example: Get active variation for a group
+const activeThemeId = activeIds.get("theme");
+
+// Example: Set active variation
+setActiveId("theme", "dark");
+
+// Example: Get all variations for a group
+const themeVariations = Array.from(variations.entries()).filter(
+  ([, variation]) => variation.group === "theme"
+);
+```
+
+For TypeScript users, you can make the hook type-safe by providing group and ID types:
+
+```tsx
+type Groups = "theme" | "layout" | "typography";
+type Ids = "light" | "dark" | "sidebar" | "topnav";
+
+const { activeIds, setActiveId } = useVariations<Groups, Ids>();
+// Now TypeScript will ensure you only use valid group and variation IDs
+```
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
