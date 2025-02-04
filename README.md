@@ -46,21 +46,32 @@ By default, variations are saved to and loaded from the URL query string so that
 The URL query string uses a clean, readable format:
 
 ```
-http://localhost:3000/?var=group.id_group.id_group.id
+http://localhost:3000/?var=group.id_group.id_group.id&state=encoded_json_state
 ```
 
 For example:
 
 ```
-http://localhost:3000/?var=root.login-page_login-form.option-2_email-form.show
+http://localhost:3000/?var=root.login-page_login-form.option-2_email-form.show&state=%7B%22theme%22%3A%7B%22primaryColor%22%3A%22%23000000%22%7D%7D
 ```
 
 Where:
 
 - `.` separates a group from its ID (e.g., `login-form.option-2`)
 - `_` separates different variations (e.g., `login-form.option-2_email-form.show`)
+- `state` contains the URL-encoded JSON of your global state
 
-This format is URL-safe (no encoding needed) and makes it easy to share specific variation combinations with others.
+This format makes it easy to share not just variations but also the entire application state with others. The state is automatically synchronized with the URL, so you can:
+
+- Share URLs that include both variations and state
+- Use browser back/forward navigation to move through state history
+- Bookmark specific states of your application
+
+You can disable this behavior by setting `disableQueryString` to `true`:
+
+```tsx
+<VariationsProvider disableQueryString={true}>{children}</VariationsProvider>
+```
 
 Note for Next.js users: Variations requires the `"use client"` directive to be present in the root component.
 
@@ -155,6 +166,90 @@ The Controls component automatically displays all registered variations and allo
 
 ### Hooks
 
+#### useVariationsState
+
+A hook for accessing and updating global state that lives alongside your variations. This state is independent of any specific variation and can be used to store any application-wide data.
+
+```tsx
+interface GlobalState {
+  theme: {
+    primaryColor: string;
+    fontSize: number;
+  };
+  preferences: {
+    showAdvancedOptions: boolean;
+  };
+}
+
+// First, provide initial state through the provider
+function App() {
+  const initialState: GlobalState = {
+    theme: {
+      primaryColor: "#000000",
+      fontSize: 16,
+    },
+    preferences: {
+      showAdvancedOptions: false,
+    },
+  };
+
+  return (
+    <VariationsProvider initialState={initialState}>
+      <YourApp />
+    </VariationsProvider>
+  );
+}
+
+// Then use the state anywhere in your app
+function ThemeControls() {
+  const { state, setState } = useVariationsState<GlobalState>();
+
+  const updatePrimaryColor = (color: string) => {
+    setState((prev) => ({
+      ...prev,
+      theme: {
+        ...prev.theme,
+        primaryColor: color,
+      },
+    }));
+  };
+
+  return (
+    <div>
+      <input
+        type="color"
+        value={state.theme.primaryColor}
+        onChange={(e) => updatePrimaryColor(e.target.value)}
+      />
+      <label>
+        <input
+          type="checkbox"
+          checked={state.preferences.showAdvancedOptions}
+          onChange={(e) => {
+            setState((prev) => ({
+              ...prev,
+              preferences: {
+                ...prev.preferences,
+                showAdvancedOptions: e.target.checked,
+              },
+            }));
+          }}
+        />
+        Show Advanced Options
+      </label>
+    </div>
+  );
+}
+```
+
+The global state feature provides:
+
+- Type-safe state management with TypeScript
+- Immutable state updates using an updater function pattern
+- Access to state from anywhere in your app
+- Independent of variations system
+- Persists across variation changes
+
 #### useVariation
 
 A hook for managing a single variation group. This is the recommended way to programmatically interact with variations.
@@ -247,3 +342,150 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 MIT © Dan Perrera
+
+### State Management
+
+The Variations library includes a built-in state management system that lives alongside your variations. This state is:
+
+- Independent of your variations
+- Globally accessible
+- Type-safe with TypeScript
+- Automatically synced to the URL (optional)
+
+#### Basic Usage
+
+```tsx
+// First, define your state type (optional but recommended)
+interface AppState {
+  theme: {
+    primaryColor: string;
+    fontSize: number;
+  };
+  settings: {
+    showAdvancedFeatures: boolean;
+  };
+}
+
+// Initialize the state in your root component
+function App() {
+  const initialState: AppState = {
+    theme: {
+      primaryColor: "#000000",
+      fontSize: 16,
+    },
+    settings: {
+      showAdvancedFeatures: false,
+    },
+  };
+
+  return (
+    <VariationsProvider initialState={initialState}>
+      <YourApp />
+    </VariationsProvider>
+  );
+}
+
+// Then use the state anywhere in your app
+function ThemeControls() {
+  const { state, setState } = useVariationsState<AppState>();
+
+  // Read from state
+  const { primaryColor, fontSize } = state.theme;
+
+  // Update a single value
+  const updateColor = (color: string) => {
+    setState((prev) => ({
+      ...prev,
+      theme: {
+        ...prev.theme,
+        primaryColor: color,
+      },
+    }));
+  };
+
+  // Update multiple values at once
+  const updateTheme = (color: string, size: number) => {
+    setState((prev) => ({
+      ...prev,
+      theme: {
+        ...prev.theme,
+        primaryColor: color,
+        fontSize: size,
+      },
+    }));
+  };
+
+  return (
+    <div>
+      <input
+        type="color"
+        value={primaryColor}
+        onChange={(e) => updateColor(e.target.value)}
+      />
+      <input
+        type="number"
+        value={fontSize}
+        onChange={(e) => updateTheme(primaryColor, Number(e.target.value))}
+      />
+    </div>
+  );
+}
+```
+
+#### URL Synchronization
+
+The state is automatically synchronized with the URL, making it easy to share specific states:
+
+```tsx
+// This URL includes both variations and state
+//localhost:3000/?var=theme.dark&state=%7B%22theme%22%3A%7B%22primaryColor%22%3A%22%23000%22%7D%7D
+
+// You can disable URL synchronization if needed
+http: <VariationsProvider disableQueryString={true}>
+  <YourApp />
+</VariationsProvider>;
+```
+
+#### Using with React Context
+
+The state management works great alongside React's Context API:
+
+```tsx
+// Create a custom hook that combines variations state with context
+function useTheme() {
+  const { state, setState } = useVariationsState<AppState>();
+
+  const updateTheme = useCallback(
+    (color: string) => {
+      setState((prev) => ({
+        ...prev,
+        theme: {
+          ...prev.theme,
+          primaryColor: color,
+        },
+      }));
+    },
+    [setState]
+  );
+
+  return {
+    primaryColor: state.theme.primaryColor,
+    updateTheme,
+  };
+}
+
+// Use it in your components
+function ThemeButton() {
+  const { primaryColor, updateTheme } = useTheme();
+
+  return <button style={{ backgroundColor: primaryColor }}>Click Me</button>;
+}
+```
+
+#### Best Practices
+
+1. Define your state type with TypeScript for better type safety
+2. Use the updater function pattern to modify state
+3. Create custom hooks for common state operations
+4. Keep state updates immutable
+5. Consider disabling URL sync for sensitive data

@@ -12,10 +12,12 @@ export interface VariationsContextType {
     }>;
     activeTree: VariationNode | null;
 }
-export interface VariationsProviderProps {
+export interface VariationsProviderProps<TState = unknown> {
     children: ReactNode;
     /** Disables the URL query string functionality when true */
     disableQueryString?: boolean;
+    /** Initial state for the global state context */
+    initialState?: TState;
 }
 export interface VariationNode {
     id: string;

@@ -1,7 +1,9 @@
-import { VariationsContextType } from './types';
+import { VariationsContextType, VariationsStateContextType } from './types';
 import { VariationsProviderProps } from './internal-types';
 export declare const VariationsContext: import('react').Context<VariationsContextType<string, string> | null>;
+export declare const VariationsStateContext: import('react').Context<VariationsStateContextType<unknown> | null>;
 export declare function useVariations<TGroup extends string = string, TId extends string = string>(): VariationsContextType<TGroup, TId>;
+export declare function useVariationsState<TState = unknown>(): VariationsStateContextType<TState>;
 export declare function useVariation(group: string): {
     /** The currently active variation */
     active: {
@@ -16,4 +18,11 @@ export declare function useVariation(group: string): {
         label: string;
     }[];
 };
-export declare function VariationsProvider({ children, disableQueryString, }: VariationsProviderProps): import("react").JSX.Element;
+export interface VariationsProviderProps<TState = unknown> {
+    children: React.ReactNode;
+    /** Disables the URL query string functionality when true */
+    disableQueryString?: boolean;
+    /** Initial state for the global state context */
+    initialState?: TState;
+}
+export declare function VariationsProvider<TState = unknown>({ children, disableQueryString, initialState, }: VariationsProviderProps<TState>): import("react").JSX.Element;

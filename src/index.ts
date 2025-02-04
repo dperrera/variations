@@ -4,6 +4,7 @@ export {
   VariationsProvider,
   useVariations,
   useVariation,
+  useVariationsState,
 } from "./VariationsProvider";
 export { VariationsControls } from "./VariationsControls";
 export type {
@@ -12,4 +13,5 @@ export type {
   VariationsPosition,
   VariationsControlsProps,
   VariationsContextType,
+  VariationsStateContextType,
 } from "./types";

@@ -7,13 +7,20 @@ import {
   useMemo,
   useState,
 } from "react";
-import type { VariationNode, VariationsContextType } from "./types";
+import type {
+  VariationNode,
+  VariationsContextType,
+  VariationsStateContextType,
+} from "./types";
 import type { VariationsProviderProps } from "./internal-types";
 
 export const VariationsContext = createContext<VariationsContextType<
   string,
   string
 > | null>(null);
+
+export const VariationsStateContext =
+  createContext<VariationsStateContextType | null>(null);
 
 export function useVariations<
   TGroup extends string = string,
@@ -24,6 +31,18 @@ export function useVariations<
     throw new Error("useVariations must be used within a VariationsProvider");
   }
   return context as unknown as VariationsContextType<TGroup, TId>;
+}
+
+export function useVariationsState<
+  TState = unknown
+>(): VariationsStateContextType<TState> {
+  const context = useContext(VariationsStateContext);
+  if (!context) {
+    throw new Error(
+      "useVariationsState must be used within a VariationsProvider"
+    );
+  }
+  return context as VariationsStateContextType<TState>;
 }
 
 export function useVariation(group: string) {
@@ -57,10 +76,19 @@ export function useVariation(group: string) {
   };
 }
 
-export function VariationsProvider({
+export interface VariationsProviderProps<TState = unknown> {
+  children: React.ReactNode;
+  /** Disables the URL query string functionality when true */
+  disableQueryString?: boolean;
+  /** Initial state for the global state context */
+  initialState?: TState;
+}
+
+export function VariationsProvider<TState = unknown>({
   children,
   disableQueryString = false,
-}: VariationsProviderProps) {
+  initialState,
+}: VariationsProviderProps<TState>) {
   const [localActiveIds, setLocalActiveIds] = useState<Map<string, string>>(
     new Map()
   );
@@ -71,56 +99,85 @@ export function VariationsProvider({
     >
   >(new Map());
 
+  // Global state management
+  const [globalState, setGlobalState] = useState<TState>(
+    () => initialState as TState
+  );
+
   // Initialize from URL if present
   useEffect(() => {
     if (disableQueryString || typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
+
+    // Parse variations
     const variations = params.get("var");
-    if (!variations) return;
-    try {
-      // Parse the URL-friendly format "group.id_group.id_group.id"
-      const pairs = variations.split("_").map((pair) => {
-        const [group, id] = pair.split(".");
-        if (!group || !id) throw new Error("Invalid format");
-        return [group, id] as [string, string];
-      });
-      setLocalActiveIds(new Map(pairs));
-    } catch (e) {
-      // Invalid format, ignore
-      setLocalActiveIds(new Map());
+    if (variations) {
+      try {
+        const pairs = variations.split("_").map((pair) => {
+          const [group, id] = pair.split(".");
+          if (!group || !id) throw new Error("Invalid format");
+          return [group, id] as [string, string];
+        });
+        setLocalActiveIds(new Map(pairs));
+      } catch (e) {
+        setLocalActiveIds(new Map());
+      }
+    }
+
+    // Parse state
+    const stateParam = params.get("state");
+    if (stateParam) {
+      try {
+        const decodedState = JSON.parse(
+          decodeURIComponent(stateParam)
+        ) as TState;
+        setGlobalState(decodedState);
+      } catch (e) {
+        // Invalid state format, keep initial state
+      }
     }
   }, [disableQueryString]);
 
-  // Update URL when variations change
+  // Update URL when variations or state change
   useEffect(() => {
     if (disableQueryString || typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
+
+    // Update variations param
     const variations = Array.from(localActiveIds.entries());
     if (variations.length === 0) {
       params.delete("var");
     } else {
-      // Convert to URL-friendly format "group.id_group.id_group.id"
       const urlValue = variations
         .map(([group, id]) => `${group}.${id}`)
         .join("_");
       params.set("var", urlValue);
     }
+
+    // Update state param
+    if (globalState !== undefined) {
+      params.set("state", encodeURIComponent(JSON.stringify(globalState)));
+    } else {
+      params.delete("state");
+    }
+
     const newSearch = params.toString();
     const newUrl = newSearch
       ? `${window.location.pathname}?${newSearch}`
       : window.location.pathname;
     window.history.replaceState({}, "", newUrl);
-  }, [localActiveIds, disableQueryString]);
+  }, [localActiveIds, globalState, disableQueryString]);
 
   // Listen for URL changes
   useEffect(() => {
     if (disableQueryString || typeof window === "undefined") return;
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search);
+
+      // Handle variations
       const variations = params.get("var");
       if (variations) {
         try {
-          // Parse the URL-friendly format "group.id_group.id_group.id"
           const pairs = variations.split("_").map((pair) => {
             const [group, id] = pair.split(".");
             if (!group || !id) throw new Error("Invalid format");
@@ -128,11 +185,23 @@ export function VariationsProvider({
           });
           setLocalActiveIds(new Map(pairs));
         } catch (e) {
-          // Invalid format, ignore
           setLocalActiveIds(new Map());
         }
       } else {
         setLocalActiveIds(new Map());
+      }
+
+      // Handle state
+      const stateParam = params.get("state");
+      if (stateParam) {
+        try {
+          const decodedState = JSON.parse(
+            decodeURIComponent(stateParam)
+          ) as TState;
+          setGlobalState(decodedState);
+        } catch (e) {
+          // Invalid state format, keep current state
+        }
       }
     };
     window.addEventListener("popstate", handlePopState);
@@ -229,7 +298,7 @@ export function VariationsProvider({
     []
   );
 
-  const value = useMemo(
+  const variationsValue = useMemo(
     () => ({
       activeIds: localActiveIds,
       setActiveId,
@@ -246,9 +315,21 @@ export function VariationsProvider({
     ]
   );
 
+  const stateValue = useMemo(
+    () => ({
+      state: globalState,
+      setState: (updater: (prev: TState) => TState) => {
+        setGlobalState(updater);
+      },
+    }),
+    [globalState]
+  );
+
   return (
-    <VariationsContext.Provider value={value}>
-      {children}
+    <VariationsContext.Provider value={variationsValue}>
+      <VariationsStateContext.Provider value={stateValue}>
+        {children}
+      </VariationsStateContext.Provider>
     </VariationsContext.Provider>
   );
 }

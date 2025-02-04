@@ -35,3 +35,9 @@ export interface VariationsContextType<TGroup extends string = string, TId exten
     /** Tree representation of active variations */
     activeTree: VariationNode<TGroup, TId> | null;
 }
+export interface VariationsStateContextType<TState = unknown> {
+    /** Get the current state */
+    state: TState;
+    /** Update the state */
+    setState: (updater: (prev: TState) => TState) => void;
+}
