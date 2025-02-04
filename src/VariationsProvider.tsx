@@ -3,6 +3,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -24,7 +25,10 @@ export const useVariations = () => {
   return context;
 };
 
-export function VariationsProvider({ children }: VariationsProviderProps) {
+export function VariationsProvider({
+  children,
+  disableQueryString = false,
+}: VariationsProviderProps) {
   const [localActiveIds, setLocalActiveIds] = useState<Map<string, string>>(
     new Map()
   );
@@ -34,6 +38,68 @@ export function VariationsProvider({ children }: VariationsProviderProps) {
       { parentId?: string; group: string; label: string; groupLabel: string }
     >
   >(new Map());
+
+  // Initialize from URL if present
+  useEffect(() => {
+    if (disableQueryString || typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const variations = params.get("var");
+    if (!variations) return;
+    try {
+      // Parse the URL-friendly format "group.id_group.id_group.id"
+      const pairs = variations.split("_").map((pair) => {
+        const [group, id] = pair.split(".");
+        if (!group || !id) throw new Error("Invalid format");
+        return [group, id] as [string, string];
+      });
+      setLocalActiveIds(new Map(pairs));
+    } catch (e) {
+      // Invalid format, ignore
+      setLocalActiveIds(new Map());
+    }
+  }, [disableQueryString]);
+
+  // Update URL when variations change
+  useEffect(() => {
+    if (disableQueryString || typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const variations = Array.from(localActiveIds.entries());
+    if (variations.length === 0) {
+      params.delete("var");
+    } else {
+      // Convert to URL-friendly format "group.id_group.id_group.id"
+      const urlValue = variations
+        .map(([group, id]) => `${group}.${id}`)
+        .join("_");
+      params.set("var", urlValue);
+    }
+    const newSearch = params.toString();
+    const newUrl = newSearch
+      ? `${window.location.pathname}?${newSearch}`
+      : window.location.pathname;
+    window.history.replaceState({}, "", newUrl);
+  }, [localActiveIds, disableQueryString]);
+
+  // Listen for URL changes
+  useEffect(() => {
+    if (disableQueryString || typeof window === "undefined") return;
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const variations = params.get("var");
+      if (variations) {
+        try {
+          setLocalActiveIds(new Map(JSON.parse(variations)));
+        } catch (e) {
+          // Invalid format, ignore
+          setLocalActiveIds(new Map());
+        }
+      } else {
+        setLocalActiveIds(new Map());
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [disableQueryString]);
 
   // Build the active variations tree
   const activeTree = useMemo(() => {

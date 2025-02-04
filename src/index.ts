@@ -6,4 +6,5 @@ export type {
   VariationsProps,
   VariationProps,
   VariationsPosition,
+  VariationsControlsProps,
 } from "./types";

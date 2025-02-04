@@ -2,19 +2,28 @@
 import React, { useContext, useEffect, useMemo } from "react";
 import { Variation } from "./Variation";
 import { VariationsContext } from "./VariationsProvider";
-import {
-  InternalVariationProps,
-  InternalVariationsProps,
-} from "./internal-types";
+import type { VariationProps, VariationsProps } from "./types";
 import { createSafeId } from "./utils";
 
 const ROOT_GROUP_ID = "root-variations";
 
+type InternalVariationProps = VariationProps & {
+  group?: string;
+  groupLabel?: string;
+  parentId?: string;
+  id?: string;
+};
+
+type InternalVariationsProps = VariationsProps & {
+  parentId?: string;
+  group?: string;
+};
+
 function isVariationElement(
   child: React.ReactNode
-): child is React.ReactElement<InternalVariationProps> {
+): child is React.ReactElement<VariationProps> {
   return (
-    React.isValidElement<InternalVariationProps>(child) &&
+    React.isValidElement<VariationProps>(child) &&
     child.type === Variation &&
     typeof child.props.label === "string"
   );
@@ -24,9 +33,12 @@ export function Variations({
   isRoot = false,
   label,
   children,
-  parentId,
-  group: providedGroup,
-}: InternalVariationsProps) {
+  ...internalProps
+}: VariationsProps & {
+  parentId?: string;
+  group?: string;
+}) {
+  const { parentId, group: providedGroup } = internalProps;
   const context = useContext(VariationsContext);
   if (!context) {
     throw new Error(
@@ -82,9 +94,9 @@ export function Variations({
             throw new Error("Invalid Variation component");
           }
 
-          const variationId = child.props.id || createSafeId(child.props.label);
+          const variationId = createSafeId(child.props.label);
 
-          return React.cloneElement(child, {
+          return React.cloneElement<InternalVariationProps>(child, {
             ...child.props,
             group: groupId,
             groupLabel: label,
@@ -92,12 +104,11 @@ export function Variations({
             parentId,
           });
         } else if (child.type === Variations) {
-          const variationsChild =
-            child as React.ReactElement<InternalVariationsProps>;
+          const variationsChild = child as React.ReactElement<VariationsProps>;
           const activeVariationId = activeIds.get(groupId);
           const nestedGroupId = createSafeId(variationsChild.props.label);
 
-          return React.cloneElement(variationsChild, {
+          return React.cloneElement<InternalVariationsProps>(variationsChild, {
             ...variationsChild.props,
             parentId: activeVariationId,
             group: nestedGroupId,

@@ -14,6 +14,8 @@ export interface VariationsContextType {
 }
 export interface VariationsProviderProps {
     children: ReactNode;
+    /** Disables the URL query string functionality when true */
+    disableQueryString?: boolean;
 }
 export interface VariationNode {
     id: string;

@@ -1,17 +1,20 @@
 "use client";
 import { useEffect, useMemo } from "react";
 import { useVariations } from "./VariationsProvider";
-import { InternalVariationProps } from "./internal-types";
 import { createSafeId } from "./utils";
+import type { VariationProps } from "./types";
 
 export function Variation({
-  group = "",
   label,
-  id,
-  groupLabel,
-  parentId,
   children,
-}: InternalVariationProps) {
+  ...internalProps
+}: VariationProps & {
+  group?: string;
+  groupLabel?: string;
+  parentId?: string;
+  id?: string;
+}) {
+  const { group = "", id, groupLabel, parentId } = internalProps;
   const generatedId = useMemo(() => id || createSafeId(label), [id, label]);
   const { activeIds, registerVariation } = useVariations();
   const isActive = activeIds.get(group) === generatedId;

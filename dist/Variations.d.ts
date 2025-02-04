@@ -1,3 +1,6 @@
 import { default as React } from 'react';
-import { InternalVariationsProps } from './internal-types';
-export declare function Variations({ isRoot, label, children, parentId, group: providedGroup, }: InternalVariationsProps): React.JSX.Element;
+import { VariationsProps } from './types';
+export declare function Variations({ isRoot, label, children, ...internalProps }: VariationsProps & {
+    parentId?: string;
+    group?: string;
+}): React.JSX.Element;

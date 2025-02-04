@@ -20,3 +20,8 @@ export interface VariationProps {
   label: string;
   children: ReactNode;
 }
+
+export interface VariationsControlsProps {
+  position?: VariationsPosition;
+  minimizedByDefault?: boolean;
+}

@@ -1,8 +1,6 @@
 import { default as React } from 'react';
-import { VariationsPosition } from './types';
-interface VariationsControlsProps {
-    position?: VariationsPosition;
-    minimizedByDefault?: boolean;
+import { VariationsControlsProps } from './types';
+interface Props extends React.HTMLAttributes<HTMLDivElement>, VariationsControlsProps {
 }
-export declare function VariationsControls({ position, minimizedByDefault, }: VariationsControlsProps): React.JSX.Element;
+export declare function VariationsControls({ position, minimizedByDefault, className, ...props }: Props): React.JSX.Element;
 export {};

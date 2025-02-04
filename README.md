@@ -1,5 +1,7 @@
 # Variations
 
+![Variations](variations.png)
+
 A React component library that enables rapid prototyping and exploration of UI variations.
 
 ## Installation
@@ -31,6 +33,34 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   );
 }
 ```
+
+By default, variations are saved to and loaded from the URL query string so that you can share variations with others. You can disable this behavior by setting `disableQueryString` to `true`:
+
+```tsx
+<VariationsProvider disableQueryString={true}>
+  {children}
+  <VariationsControls position="bottom-center" />
+</VariationsProvider>
+```
+
+The URL query string uses a clean, readable format:
+
+```
+http://localhost:3000/?var=group.id_group.id_group.id
+```
+
+For example:
+
+```
+http://localhost:3000/?var=root-variations.login-page_login-form.option-2_email-form.show
+```
+
+Where:
+
+- `.` separates a group from its ID (e.g., `login-form.option-2`)
+- `_` separates different variations (e.g., `login-form.option-2_email-form.show`)
+
+This format is URL-safe (no encoding needed) and makes it easy to share specific variation combinations with others.
 
 Note for Next.js users: Variations requires the `"use client"` directive to be present in the root component.
 
@@ -92,6 +122,7 @@ The root component that manages a set of variations.
 Props:
 
 - `children`: React nodes containing Variation components
+- `disableQueryString` (boolean, optional): When true, disables the URL query string functionality. This prevents variations from being saved to or loaded from the URL. Defaults to `false`
 
 ### Variations Component
 

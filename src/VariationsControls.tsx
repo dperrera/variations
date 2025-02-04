@@ -1,12 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { VariationsPosition } from "./types";
+import { VariationsPosition, VariationsControlsProps } from "./types";
 import { useVariations } from "./VariationsProvider";
-
-interface VariationsControlsProps {
-  position?: VariationsPosition;
-  minimizedByDefault?: boolean;
-}
 
 const VariationGroup = ({
   group,
@@ -153,10 +148,16 @@ const VariationGroup = ({
   );
 };
 
+interface Props
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariationsControlsProps {}
+
 export function VariationsControls({
   position = "bottom-right",
   minimizedByDefault = false,
-}: VariationsControlsProps) {
+  className,
+  ...props
+}: Props) {
   const [isMinimized, setIsMinimized] = useState(minimizedByDefault);
   const { activeIds, setActiveId, variations } = useVariations();
 
@@ -293,7 +294,10 @@ export function VariationsControls({
   }, []);
 
   return (
-    <div className="variations-controls-container">
+    <div
+      className={`variations-controls-container ${className || ""}`}
+      {...props}
+    >
       <div className={`variations-controls ${isMinimized ? "minimized" : ""}`}>
         {isMinimized ? (
           <button
