@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { VariationsPosition, VariationsControlsProps } from "./types";
-import { useVariations } from "./VariationsProvider";
+import { useVariations, useVariationsState } from "./VariationsProvider";
 
 const VariationGroup = ({
   group,
@@ -162,7 +162,11 @@ export function VariationsControls({
 }: Props) {
   const [isMinimized, setIsMinimized] = useState(minimizedByDefault);
   const [showCopied, setShowCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<"variations" | "state">(
+    "variations"
+  );
   const { activeIds, setActiveId, variations } = useVariations();
+  const [state, setState] = useVariationsState();
 
   const handleCopyLink = () => {
     const params = new URLSearchParams(window.location.search);
@@ -369,7 +373,24 @@ export function VariationsControls({
                   <path d="M8.916 17.912a1 1 0 0 0 0 1.415l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.415l-2.377-2.376a1 1 0 0 0-1.414 0z" />
                   <path d="M8.916 4.674a1 1 0 0 0 0 1.414l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z" />
                 </svg>
-                Variations
+                <div className="variations-tabs">
+                  <button
+                    className={`variations-tab ${
+                      activeTab === "variations" ? "active" : ""
+                    }`}
+                    onClick={() => setActiveTab("variations")}
+                  >
+                    Variations
+                  </button>
+                  <button
+                    className={`variations-tab ${
+                      activeTab === "state" ? "active" : ""
+                    }`}
+                    onClick={() => setActiveTab("state")}
+                  >
+                    State
+                  </button>
+                </div>
               </div>
               <div className="variations-header-actions">
                 <button
@@ -380,8 +401,8 @@ export function VariationsControls({
                 >
                   {showCopied ? (
                     <svg
-                      width="12"
-                      height="12"
+                      width="10"
+                      height="10"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -389,32 +410,30 @@ export function VariationsControls({
                       <path
                         d="M20 6L9 17L4 12"
                         stroke="currentColor"
-                        strokeWidth="2.5"
+                        strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       />
                     </svg>
                   ) : (
                     <svg
+                      xmlns="http://www.w3.org/2000/svg"
                       width="12"
                       height="12"
                       viewBox="0 0 24 24"
                       fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
-                      <path
-                        d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                      <path d="M9 17H7A5 5 0 0 1 7 7h2" />
+                      <path d="M15 7h2a5 5 0 1 1 0 10h-2" />
+                      <line
+                        x1="8"
+                        x2="16"
+                        y1="12"
+                        y2="12"
                       />
                     </svg>
                   )}
@@ -429,7 +448,29 @@ export function VariationsControls({
               </div>
             </div>
 
-            <div className="variation-groups">{allGroups}</div>
+            <div className="variation-content">
+              {activeTab === "variations" ? (
+                <div className="variation-groups">{allGroups}</div>
+              ) : (
+                <div className="variation-state">
+                  <div className="state-editor">
+                    <textarea
+                      value={JSON.stringify(state, null, 2)}
+                      onChange={(e) => {
+                        try {
+                          const newState = JSON.parse(e.target.value);
+                          setState(newState);
+                        } catch (err) {
+                          // Invalid JSON, ignore
+                        }
+                      }}
+                      spellCheck={false}
+                      className="state-textarea"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>
@@ -481,7 +522,7 @@ export function VariationsControls({
             overflow: auto;
             box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05),
               0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 0;
+            padding: 2px;
           }
 
           .variations-controls.minimized {
@@ -555,7 +596,7 @@ export function VariationsControls({
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            padding: 2px 2px 0 10px;
+            padding-left: 10px;
             backdrop-filter: blur(4px);
           }
 
@@ -565,7 +606,6 @@ export function VariationsControls({
             text-transform: uppercase;
             letter-spacing: 0.05em;
             line-height: 12px;
-            font-weight: 700;
             color: #999;
             display: flex;
             align-items: center;
@@ -629,10 +669,68 @@ export function VariationsControls({
             outline: none;
           }
 
-          .variation-groups {
+          .variations-tabs {
             display: flex;
-            flex-direction: column;
-            padding: 2px;
+            gap: 8px;
+            margin-right: 4px;
+          }
+
+          .variations-tab {
+            text-transform: uppercase;
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 500;
+            border-top: 1px solid transparent;
+            border-bottom: 1px solid transparent;
+          }
+          .variations-tab:hover {
+            color: #000;
+          }
+          .variations-tab:focus {
+            border-bottom: 1px solid;
+            outline: none;
+          }
+          .variations-tab.active {
+            color: #000;
+          }
+
+          .variation-content {
+            flex: 1;
+            overflow: auto;
+          }
+
+          .variation-state {
+            padding: 8px;
+          }
+
+          .state-editor {
+            position: relative;
+            display: flex;
+            height: 100%;
+            max-height: 100%;
+          }
+
+          .state-textarea {
+            width: 100%;
+            max-height: 80vh;
+            min-height: 200px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.03);
+            color: #111;
+            resize: vertical;
+          }
+
+          .state-textarea:focus {
+            outline: none;
+            background: rgba(0, 0, 0, 0.05);
           }
 
           @media (prefers-color-scheme: dark) {
@@ -681,6 +779,33 @@ export function VariationsControls({
             .variations-header-button:focus {
               background: white;
               color: #111111;
+            }
+
+            .variations-tabs {
+              display: flex;
+              gap: 8px;
+              margin-right: 4px;
+            }
+
+            .variations-tab:hover {
+              color: #fff;
+            }
+            .variations-tab:focus {
+              border-bottom: 1px solid;
+            }
+            .variations-tab.active {
+              border-bottom: 1px solid transparent;
+              color: #fff;
+            }
+              
+
+            .state-textarea {
+              background: rgba(255, 255, 255, 0.05);
+              color: #fff;
+            }
+
+            .state-textarea:focus {
+              background: rgba(255, 255, 255, 0.1);
             }
           }
         `}
