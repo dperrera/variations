@@ -12,7 +12,6 @@ import type {
   VariationsContextType,
   VariationsStateContextType,
 } from "./types";
-import type { VariationsProviderProps } from "./internal-types";
 
 export const VariationsContext = createContext<VariationsContextType<
   string,
@@ -20,7 +19,7 @@ export const VariationsContext = createContext<VariationsContextType<
 > | null>(null);
 
 export const VariationsStateContext =
-  createContext<VariationsStateContextType | null>(null);
+  createContext<VariationsStateContextType<any> | null>(null);
 
 export function useVariations<
   TGroup extends string = string,
@@ -33,16 +32,20 @@ export function useVariations<
   return context as unknown as VariationsContextType<TGroup, TId>;
 }
 
-export function useVariationsState<
-  TState = unknown
->(): VariationsStateContextType<TState> {
+export function useVariationsState<TState = unknown>(): [
+  TState,
+  (valueOrUpdater: TState | ((prev: TState) => TState)) => void
+] {
   const context = useContext(VariationsStateContext);
   if (!context) {
     throw new Error(
       "useVariationsState must be used within a VariationsProvider"
     );
   }
-  return context as VariationsStateContextType<TState>;
+  return [context.state, context.setState] as [
+    TState,
+    (valueOrUpdater: TState | ((prev: TState) => TState)) => void
+  ];
 }
 
 export function useVariation(group: string) {
@@ -109,7 +112,7 @@ export function VariationsProvider<TState = unknown>({
     if (disableQueryString || typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
 
-    // Parse variations
+    // Parse variations first
     const variations = params.get("var");
     if (variations) {
       try {
@@ -125,12 +128,10 @@ export function VariationsProvider<TState = unknown>({
     }
 
     // Parse state
-    const stateParam = params.get("state");
+    const stateParam = params.get("s");
     if (stateParam) {
       try {
-        const decodedState = JSON.parse(
-          decodeURIComponent(stateParam)
-        ) as TState;
+        const decodedState = JSON.parse(atob(stateParam)) as TState;
         setGlobalState(decodedState);
       } catch (e) {
         // Invalid state format, keep initial state
@@ -141,24 +142,21 @@ export function VariationsProvider<TState = unknown>({
   // Update URL when variations or state change
   useEffect(() => {
     if (disableQueryString || typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams();
 
-    // Update variations param
+    // Update variations param first
     const variations = Array.from(localActiveIds.entries());
-    if (variations.length === 0) {
-      params.delete("var");
-    } else {
+    if (variations.length > 0) {
       const urlValue = variations
         .map(([group, id]) => `${group}.${id}`)
         .join("_");
       params.set("var", urlValue);
     }
 
-    // Update state param
+    // Update state param second
     if (globalState !== undefined) {
-      params.set("state", encodeURIComponent(JSON.stringify(globalState)));
-    } else {
-      params.delete("state");
+      const stateStr = btoa(JSON.stringify(globalState));
+      params.set("s", stateStr);
     }
 
     const newSearch = params.toString();
@@ -174,7 +172,7 @@ export function VariationsProvider<TState = unknown>({
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search);
 
-      // Handle variations
+      // Handle variations first
       const variations = params.get("var");
       if (variations) {
         try {
@@ -191,13 +189,11 @@ export function VariationsProvider<TState = unknown>({
         setLocalActiveIds(new Map());
       }
 
-      // Handle state
-      const stateParam = params.get("state");
+      // Handle state second
+      const stateParam = params.get("s");
       if (stateParam) {
         try {
-          const decodedState = JSON.parse(
-            decodeURIComponent(stateParam)
-          ) as TState;
+          const decodedState = JSON.parse(atob(stateParam)) as TState;
           setGlobalState(decodedState);
         } catch (e) {
           // Invalid state format, keep current state
@@ -318,8 +314,12 @@ export function VariationsProvider<TState = unknown>({
   const stateValue = useMemo(
     () => ({
       state: globalState,
-      setState: (updater: (prev: TState) => TState) => {
-        setGlobalState(updater);
+      setState: (valueOrUpdater: TState | ((prev: TState) => TState)) => {
+        if (typeof valueOrUpdater === "function") {
+          setGlobalState(valueOrUpdater as (prev: TState) => TState);
+        } else {
+          setGlobalState(valueOrUpdater);
+        }
       },
     }),
     [globalState]

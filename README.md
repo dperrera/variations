@@ -46,20 +46,20 @@ By default, variations are saved to and loaded from the URL query string so that
 The URL query string uses a clean, readable format:
 
 ```
-http://localhost:3000/?var=group.id_group.id_group.id&state=encoded_json_state
+http://localhost:3000/?var=group.id_group.id_group.id&s=base64_encoded_state
 ```
 
 For example:
 
 ```
-http://localhost:3000/?var=root.login-page_login-form.option-2_email-form.show&state=%7B%22theme%22%3A%7B%22primaryColor%22%3A%22%23000000%22%7D%7D
+http://localhost:3000/?var=root.login-page_login-form.option-2_email-form.show&s=eyJ0aGVtZSI6eyJwcmltYXJ5Q29sb3IiOiIjMDAwIn19
 ```
 
 Where:
 
 - `.` separates a group from its ID (e.g., `login-form.option-2`)
 - `_` separates different variations (e.g., `login-form.option-2_email-form.show`)
-- `state` contains the URL-encoded JSON of your global state
+- `s` contains the base64-encoded JSON of your global state
 
 This format makes it easy to share not just variations but also the entire application state with others. The state is automatically synchronized with the URL, so you can:
 
@@ -168,7 +168,7 @@ The Controls component automatically displays all registered variations and allo
 
 #### useVariationsState
 
-A hook for accessing and updating global state that lives alongside your variations. This state is independent of any specific variation and can be used to store any application-wide data.
+A hook for accessing and updating global state that lives alongside your variations. This state is independent of any specific variation and can be used to store any application-wide data. The hook follows React's useState pattern, returning a tuple of the state and a setter function.
 
 ```tsx
 interface GlobalState {
@@ -202,25 +202,35 @@ function App() {
 
 // Then use the state anywhere in your app
 function ThemeControls() {
-  const { state, setState } = useVariationsState<GlobalState>();
-
-  const updatePrimaryColor = (color: string) => {
-    setState((prev) => ({
-      ...prev,
-      theme: {
-        ...prev.theme,
-        primaryColor: color,
-      },
-    }));
-  };
+  const [state, setState] = useVariationsState<GlobalState>();
 
   return (
     <div>
-      <input
-        type="color"
-        value={state.theme.primaryColor}
-        onChange={(e) => updatePrimaryColor(e.target.value)}
-      />
+      {/* Direct value update */}
+      <button
+        onClick={() =>
+          setState({
+            ...state,
+            theme: { ...state.theme, primaryColor: "#000000" },
+          })
+        }
+      >
+        Set Dark Theme
+      </button>
+
+      {/* Updater function */}
+      <button
+        onClick={() =>
+          setState((prev) => ({
+            ...prev,
+            theme: { ...prev.theme, primaryColor: "#ffffff" },
+          }))
+        }
+      >
+        Set Light Theme
+      </button>
+
+      {/* Toggle with updater function */}
       <label>
         <input
           type="checkbox"
@@ -244,11 +254,13 @@ function ThemeControls() {
 
 The global state feature provides:
 
+- Familiar React useState-like API with support for both direct values and updater functions
 - Type-safe state management with TypeScript
-- Immutable state updates using an updater function pattern
+- Immutable state updates
 - Access to state from anywhere in your app
 - Independent of variations system
 - Persists across variation changes
+- Compact URL encoding for sharing
 
 #### useVariation
 

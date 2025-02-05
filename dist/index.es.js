@@ -1,66 +1,51 @@
-import O, { createContext as Ve, useContext as ae, useMemo as I, useState as B, useEffect as J, useCallback as Se } from "react";
-var q = { exports: {} }, W = {};
+import R, { createContext as Ue, useContext as ae, useMemo as D, useState as Y, useEffect as W, useCallback as Ce } from "react";
+var B = { exports: {} }, J = {};
 /**
  * @license React
- * react-jsx-runtime.production.js
+ * react-jsx-dev-runtime.production.js
  *
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var Ae;
-function $e() {
-  if (Ae) return W;
-  Ae = 1;
-  var t = Symbol.for("react.transitional.element"), m = Symbol.for("react.fragment");
-  function y(v, l, p) {
-    var k = null;
-    if (p !== void 0 && (k = "" + p), l.key !== void 0 && (k = "" + l.key), "key" in l) {
-      p = {};
-      for (var u in l)
-        u !== "key" && (p[u] = l[u]);
-    } else p = l;
-    return l = p.ref, {
-      $$typeof: t,
-      type: v,
-      key: k,
-      ref: l !== void 0 ? l : null,
-      props: p
-    };
-  }
-  return W.Fragment = m, W.jsx = y, W.jsxs = y, W;
+var ke;
+function Ie() {
+  if (ke) return J;
+  ke = 1;
+  var r = Symbol.for("react.fragment");
+  return J.Fragment = r, J.jsxDEV = void 0, J;
 }
-var G = {};
+var K = {};
 /**
  * @license React
- * react-jsx-runtime.development.js
+ * react-jsx-dev-runtime.development.js
  *
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var Te;
-function ze() {
-  return Te || (Te = 1, process.env.NODE_ENV !== "production" && function() {
-    function t(e) {
+var Pe;
+function Le() {
+  return Pe || (Pe = 1, process.env.NODE_ENV !== "production" && function() {
+    function r(e) {
       if (e == null) return null;
       if (typeof e == "function")
-        return e.$$typeof === Ie ? null : e.displayName || e.name || null;
+        return e.$$typeof === De ? null : e.displayName || e.name || null;
       if (typeof e == "string") return e;
       switch (e) {
-        case H:
+        case q:
           return "Fragment";
-        case R:
+        case P:
           return "Portal";
         case ce:
           return "Profiler";
         case le:
           return "StrictMode";
-        case Z:
+        case H:
           return "Suspense";
-        case Q:
+        case Z:
           return "SuspenseList";
       }
       if (typeof e == "object")
@@ -71,45 +56,45 @@ function ze() {
             return (e.displayName || "Context") + ".Provider";
           case ue:
             return (e._context.displayName || "Context") + ".Consumer";
-          case K:
-            var r = e.render;
-            return e = e.displayName, e || (e = r.displayName || r.name || "", e = e !== "" ? "ForwardRef(" + e + ")" : "ForwardRef"), e;
-          case D:
-            return r = e.displayName || null, r !== null ? r : t(e.type) || "Memo";
+          case F:
+            var t = e.render;
+            return e = e.displayName, e || (e = t.displayName || t.name || "", e = e !== "" ? "ForwardRef(" + e + ")" : "ForwardRef"), e;
+          case Q:
+            return t = e.displayName || null, t !== null ? t : r(e.type) || "Memo";
           case ee:
-            r = e._payload, e = e._init;
+            t = e._payload, e = e._init;
             try {
-              return t(e(r));
+              return r(e(t));
             } catch {
             }
         }
       return null;
     }
-    function m(e) {
+    function x(e) {
       return "" + e;
     }
     function y(e) {
       try {
-        m(e);
-        var r = !1;
+        x(e);
+        var t = !1;
       } catch {
-        r = !0;
+        t = !0;
       }
-      if (r) {
-        r = console;
-        var o = r.error, g = typeof Symbol == "function" && Symbol.toStringTag && e[Symbol.toStringTag] || e.constructor.name || "Object";
+      if (t) {
+        t = console;
+        var o = t.error, p = typeof Symbol == "function" && Symbol.toStringTag && e[Symbol.toStringTag] || e.constructor.name || "Object";
         return o.call(
-          r,
+          t,
           "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.",
-          g
-        ), m(e);
+          p
+        ), x(e);
       }
     }
     function v() {
     }
-    function l() {
-      if (Y === 0) {
-        ge = console.log, he = console.info, ve = console.warn, me = console.error, xe = console.group, we = console.groupCollapsed, be = console.groupEnd;
+    function m() {
+      if ($ === 0) {
+        pe = console.log, ve = console.info, he = console.warn, ge = console.error, be = console.group, xe = console.groupCollapsed, we = console.groupEnd;
         var e = {
           configurable: !0,
           enumerable: !0,
@@ -126,181 +111,181 @@ function ze() {
           groupEnd: e
         });
       }
-      Y++;
+      $++;
     }
-    function p() {
-      if (Y--, Y === 0) {
+    function w() {
+      if ($--, $ === 0) {
         var e = { configurable: !0, enumerable: !0, writable: !0 };
         Object.defineProperties(console, {
-          log: P({}, e, { value: ge }),
-          info: P({}, e, { value: he }),
-          warn: P({}, e, { value: ve }),
-          error: P({}, e, { value: me }),
-          group: P({}, e, { value: xe }),
-          groupCollapsed: P({}, e, { value: we }),
-          groupEnd: P({}, e, { value: be })
+          log: O({}, e, { value: pe }),
+          info: O({}, e, { value: ve }),
+          warn: O({}, e, { value: he }),
+          error: O({}, e, { value: ge }),
+          group: O({}, e, { value: be }),
+          groupCollapsed: O({}, e, { value: xe }),
+          groupEnd: O({}, e, { value: we })
         });
       }
-      0 > Y && console.error(
+      0 > $ && console.error(
         "disabledDepth fell below zero. This is a bug in React. Please file an issue."
       );
     }
-    function k(e) {
-      if (re === void 0)
+    function E(e) {
+      if (te === void 0)
         try {
           throw Error();
         } catch (o) {
-          var r = o.stack.trim().match(/\n( *(at )?)/);
-          re = r && r[1] || "", Ee = -1 < o.stack.indexOf(`
+          var t = o.stack.trim().match(/\n( *(at )?)/);
+          te = t && t[1] || "", Ne = -1 < o.stack.indexOf(`
     at`) ? " (<anonymous>)" : -1 < o.stack.indexOf("@") ? "@unknown:0:0" : "";
         }
       return `
-` + re + e + Ee;
+` + te + e + Ne;
     }
-    function u(e, r) {
+    function d(e, t) {
       if (!e || oe) return "";
       var o = ne.get(e);
       if (o !== void 0) return o;
       oe = !0, o = Error.prepareStackTrace, Error.prepareStackTrace = void 0;
-      var g = null;
-      g = L.H, L.H = null, l();
+      var p = null;
+      p = M.H, M.H = null, m();
       try {
         var S = {
           DetermineComponentFrameRoot: function() {
             try {
-              if (r) {
-                var M = function() {
+              if (t) {
+                var _ = function() {
                   throw Error();
                 };
-                if (Object.defineProperty(M.prototype, "props", {
+                if (Object.defineProperty(_.prototype, "props", {
                   set: function() {
                     throw Error();
                   }
                 }), typeof Reflect == "object" && Reflect.construct) {
                   try {
-                    Reflect.construct(M, []);
-                  } catch (N) {
-                    var X = N;
+                    Reflect.construct(_, []);
+                  } catch (T) {
+                    var G = T;
                   }
-                  Reflect.construct(e, [], M);
+                  Reflect.construct(e, [], _);
                 } else {
                   try {
-                    M.call();
-                  } catch (N) {
-                    X = N;
+                    _.call();
+                  } catch (T) {
+                    G = T;
                   }
-                  e.call(M.prototype);
+                  e.call(_.prototype);
                 }
               } else {
                 try {
                   throw Error();
-                } catch (N) {
-                  X = N;
+                } catch (T) {
+                  G = T;
                 }
-                (M = e()) && typeof M.catch == "function" && M.catch(function() {
+                (_ = e()) && typeof _.catch == "function" && _.catch(function() {
                 });
               }
-            } catch (N) {
-              if (N && X && typeof N.stack == "string")
-                return [N.stack, X.stack];
+            } catch (T) {
+              if (T && G && typeof T.stack == "string")
+                return [T.stack, G.stack];
             }
             return [null, null];
           }
         };
         S.DetermineComponentFrameRoot.displayName = "DetermineComponentFrameRoot";
-        var E = Object.getOwnPropertyDescriptor(
+        var g = Object.getOwnPropertyDescriptor(
           S.DetermineComponentFrameRoot,
           "name"
         );
-        E && E.configurable && Object.defineProperty(
+        g && g.configurable && Object.defineProperty(
           S.DetermineComponentFrameRoot,
           "name",
           { value: "DetermineComponentFrameRoot" }
         );
-        var c = S.DetermineComponentFrameRoot(), V = c[0], z = c[1];
-        if (V && z) {
-          var T = V.split(`
-`), $ = z.split(`
+        var l = S.DetermineComponentFrameRoot(), U = l[0], L = l[1];
+        if (U && L) {
+          var k = U.split(`
+`), I = L.split(`
 `);
-          for (c = E = 0; E < T.length && !T[E].includes(
+          for (l = g = 0; g < k.length && !k[g].includes(
             "DetermineComponentFrameRoot"
           ); )
-            E++;
-          for (; c < $.length && !$[c].includes(
+            g++;
+          for (; l < I.length && !I[l].includes(
             "DetermineComponentFrameRoot"
           ); )
-            c++;
-          if (E === T.length || c === $.length)
-            for (E = T.length - 1, c = $.length - 1; 1 <= E && 0 <= c && T[E] !== $[c]; )
-              c--;
-          for (; 1 <= E && 0 <= c; E--, c--)
-            if (T[E] !== $[c]) {
-              if (E !== 1 || c !== 1)
+            l++;
+          if (g === k.length || l === I.length)
+            for (g = k.length - 1, l = I.length - 1; 1 <= g && 0 <= l && k[g] !== I[l]; )
+              l--;
+          for (; 1 <= g && 0 <= l; g--, l--)
+            if (k[g] !== I[l]) {
+              if (g !== 1 || l !== 1)
                 do
-                  if (E--, c--, 0 > c || T[E] !== $[c]) {
-                    var U = `
-` + T[E].replace(
+                  if (g--, l--, 0 > l || k[g] !== I[l]) {
+                    var z = `
+` + k[g].replace(
                       " at new ",
                       " at "
                     );
-                    return e.displayName && U.includes("<anonymous>") && (U = U.replace("<anonymous>", e.displayName)), typeof e == "function" && ne.set(e, U), U;
+                    return e.displayName && z.includes("<anonymous>") && (z = z.replace("<anonymous>", e.displayName)), typeof e == "function" && ne.set(e, z), z;
                   }
-                while (1 <= E && 0 <= c);
+                while (1 <= g && 0 <= l);
               break;
             }
         }
       } finally {
-        oe = !1, L.H = g, p(), Error.prepareStackTrace = o;
+        oe = !1, M.H = p, w(), Error.prepareStackTrace = o;
       }
-      return T = (T = e ? e.displayName || e.name : "") ? k(T) : "", typeof e == "function" && ne.set(e, T), T;
+      return k = (k = e ? e.displayName || e.name : "") ? E(k) : "", typeof e == "function" && ne.set(e, k), k;
     }
-    function x(e) {
+    function h(e) {
       if (e == null) return "";
       if (typeof e == "function") {
-        var r = e.prototype;
-        return u(
+        var t = e.prototype;
+        return d(
           e,
-          !(!r || !r.isReactComponent)
+          !(!t || !t.isReactComponent)
         );
       }
-      if (typeof e == "string") return k(e);
+      if (typeof e == "string") return E(e);
       switch (e) {
+        case H:
+          return E("Suspense");
         case Z:
-          return k("Suspense");
-        case Q:
-          return k("SuspenseList");
+          return E("SuspenseList");
       }
       if (typeof e == "object")
         switch (e.$$typeof) {
-          case K:
-            return e = u(e.render, !1), e;
-          case D:
-            return x(e.type);
+          case F:
+            return e = d(e.render, !1), e;
+          case Q:
+            return h(e.type);
           case ee:
-            r = e._payload, e = e._init;
+            t = e._payload, e = e._init;
             try {
-              return x(e(r));
+              return h(e(t));
             } catch {
             }
         }
       return "";
     }
-    function j() {
-      var e = L.A;
+    function V() {
+      var e = M.A;
       return e === null ? null : e.getOwner();
     }
-    function A(e) {
-      if (pe.call(e, "key")) {
-        var r = Object.getOwnPropertyDescriptor(e, "key").get;
-        if (r && r.isReactWarning) return !1;
+    function C(e) {
+      if (me.call(e, "key")) {
+        var t = Object.getOwnPropertyDescriptor(e, "key").get;
+        if (t && t.isReactWarning) return !1;
       }
       return e.key !== void 0;
     }
-    function C(e, r) {
+    function j(e, t) {
       function o() {
-        ke || (ke = !0, console.error(
+        Ee || (Ee = !0, console.error(
           "%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)",
-          r
+          t
         ));
       }
       o.isReactWarning = !0, Object.defineProperty(e, "key", {
@@ -308,22 +293,22 @@ function ze() {
         configurable: !0
       });
     }
-    function _() {
-      var e = t(this.type);
-      return ye[e] || (ye[e] = !0, console.error(
+    function A() {
+      var e = r(this.type);
+      return Ve[e] || (Ve[e] = !0, console.error(
         "Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."
       )), e = this.props.ref, e !== void 0 ? e : null;
     }
-    function b(e, r, o, g, S, E) {
-      return o = E.ref, e = {
-        $$typeof: f,
+    function N(e, t, o, p, S, g) {
+      return o = g.ref, e = {
+        $$typeof: u,
         type: e,
-        key: r,
-        props: E,
+        key: t,
+        props: g,
         _owner: S
       }, (o !== void 0 ? o : null) !== null ? Object.defineProperty(e, "ref", {
         enumerable: !1,
-        get: _
+        get: A
       }) : Object.defineProperty(e, "ref", { enumerable: !1, value: null }), e._store = {}, Object.defineProperty(e._store, "validated", {
         configurable: !1,
         enumerable: !1,
@@ -336,290 +321,309 @@ function ze() {
         value: null
       }), Object.freeze && (Object.freeze(e.props), Object.freeze(e)), e;
     }
-    function d(e, r, o, g, S, E) {
-      if (typeof e == "string" || typeof e == "function" || e === H || e === ce || e === le || e === Z || e === Q || e === Oe || typeof e == "object" && e !== null && (e.$$typeof === ee || e.$$typeof === D || e.$$typeof === de || e.$$typeof === ue || e.$$typeof === K || e.$$typeof === Le || e.getModuleId !== void 0)) {
-        var c = r.children;
-        if (c !== void 0)
-          if (g)
-            if (te(c)) {
-              for (g = 0; g < c.length; g++)
-                a(c[g], e);
-              Object.freeze && Object.freeze(c);
+    function c(e, t, o, p, S, g) {
+      if (typeof e == "string" || typeof e == "function" || e === q || e === ce || e === le || e === H || e === Z || e === Re || typeof e == "object" && e !== null && (e.$$typeof === ee || e.$$typeof === Q || e.$$typeof === de || e.$$typeof === ue || e.$$typeof === F || e.$$typeof === Me || e.getModuleId !== void 0)) {
+        var l = t.children;
+        if (l !== void 0)
+          if (p)
+            if (re(l)) {
+              for (p = 0; p < l.length; p++)
+                a(l[p], e);
+              Object.freeze && Object.freeze(l);
             } else
               console.error(
                 "React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead."
               );
-          else a(c, e);
+          else a(l, e);
       } else
-        c = "", (e === void 0 || typeof e == "object" && e !== null && Object.keys(e).length === 0) && (c += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports."), e === null ? g = "null" : te(e) ? g = "array" : e !== void 0 && e.$$typeof === f ? (g = "<" + (t(e.type) || "Unknown") + " />", c = " Did you accidentally export a JSX literal instead of a component?") : g = typeof e, console.error(
+        l = "", (e === void 0 || typeof e == "object" && e !== null && Object.keys(e).length === 0) && (l += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports."), e === null ? p = "null" : re(e) ? p = "array" : e !== void 0 && e.$$typeof === u ? (p = "<" + (r(e.type) || "Unknown") + " />", l = " Did you accidentally export a JSX literal instead of a component?") : p = typeof e, console.error(
           "React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s",
-          g,
-          c
+          p,
+          l
         );
-      if (pe.call(r, "key")) {
-        c = t(e);
-        var V = Object.keys(r).filter(function(T) {
-          return T !== "key";
+      if (me.call(t, "key")) {
+        l = r(e);
+        var U = Object.keys(t).filter(function(k) {
+          return k !== "key";
         });
-        g = 0 < V.length ? "{key: someKey, " + V.join(": ..., ") + ": ...}" : "{key: someKey}", je[c + g] || (V = 0 < V.length ? "{" + V.join(": ..., ") + ": ...}" : "{}", console.error(
+        p = 0 < U.length ? "{key: someKey, " + U.join(": ..., ") + ": ...}" : "{key: someKey}", je[l + p] || (U = 0 < U.length ? "{" + U.join(": ..., ") + ": ...}" : "{}", console.error(
           `A props object containing a "key" prop is being spread into JSX:
   let props = %s;
   <%s {...props} />
 React keys must be passed directly to JSX without using spread:
   let props = %s;
   <%s key={someKey} {...props} />`,
-          g,
-          c,
-          V,
-          c
-        ), je[c + g] = !0);
+          p,
+          l,
+          U,
+          l
+        ), je[l + p] = !0);
       }
-      if (c = null, o !== void 0 && (y(o), c = "" + o), A(r) && (y(r.key), c = "" + r.key), "key" in r) {
+      if (l = null, o !== void 0 && (y(o), l = "" + o), C(t) && (y(t.key), l = "" + t.key), "key" in t) {
         o = {};
-        for (var z in r)
-          z !== "key" && (o[z] = r[z]);
-      } else o = r;
-      return c && C(
+        for (var L in t)
+          L !== "key" && (o[L] = t[L]);
+      } else o = t;
+      return l && j(
         o,
         typeof e == "function" ? e.displayName || e.name || "Unknown" : e
-      ), b(e, c, E, S, j(), o);
+      ), N(e, l, g, S, V(), o);
     }
-    function a(e, r) {
-      if (typeof e == "object" && e && e.$$typeof !== Pe) {
-        if (te(e))
+    function a(e, t) {
+      if (typeof e == "object" && e && e.$$typeof !== Oe) {
+        if (re(e))
           for (var o = 0; o < e.length; o++) {
-            var g = e[o];
-            i(g) && s(g, r);
+            var p = e[o];
+            i(p) && s(p, t);
           }
         else if (i(e))
           e._store && (e._store.validated = 1);
         else if (e === null || typeof e != "object" ? o = null : (o = fe && e[fe] || e["@@iterator"], o = typeof o == "function" ? o : null), typeof o == "function" && o !== e.entries && (o = o.call(e), o !== e))
           for (; !(e = o.next()).done; )
-            i(e.value) && s(e.value, r);
+            i(e.value) && s(e.value, t);
       }
     }
     function i(e) {
-      return typeof e == "object" && e !== null && e.$$typeof === f;
+      return typeof e == "object" && e !== null && e.$$typeof === u;
     }
-    function s(e, r) {
-      if (e._store && !e._store.validated && e.key == null && (e._store.validated = 1, r = h(r), !Ce[r])) {
-        Ce[r] = !0;
+    function s(e, t) {
+      if (e._store && !e._store.validated && e.key == null && (e._store.validated = 1, t = f(t), !ye[t])) {
+        ye[t] = !0;
         var o = "";
-        e && e._owner != null && e._owner !== j() && (o = null, typeof e._owner.tag == "number" ? o = t(e._owner.type) : typeof e._owner.name == "string" && (o = e._owner.name), o = " It was passed a child from " + o + ".");
-        var g = L.getCurrentStack;
-        L.getCurrentStack = function() {
-          var S = x(e.type);
-          return g && (S += g() || ""), S;
+        e && e._owner != null && e._owner !== V() && (o = null, typeof e._owner.tag == "number" ? o = r(e._owner.type) : typeof e._owner.name == "string" && (o = e._owner.name), o = " It was passed a child from " + o + ".");
+        var p = M.getCurrentStack;
+        M.getCurrentStack = function() {
+          var S = h(e.type);
+          return p && (S += p() || ""), S;
         }, console.error(
           'Each child in a list should have a unique "key" prop.%s%s See https://react.dev/link/warning-keys for more information.',
-          r,
+          t,
           o
-        ), L.getCurrentStack = g;
+        ), M.getCurrentStack = p;
       }
     }
-    function h(e) {
-      var r = "", o = j();
-      return o && (o = t(o.type)) && (r = `
+    function f(e) {
+      var t = "", o = V();
+      return o && (o = r(o.type)) && (t = `
 
-Check the render method of \`` + o + "`."), r || (e = t(e)) && (r = `
+Check the render method of \`` + o + "`."), t || (e = r(e)) && (t = `
 
-Check the top-level render call using <` + e + ">."), r;
+Check the top-level render call using <` + e + ">."), t;
     }
-    var w = O, f = Symbol.for("react.transitional.element"), R = Symbol.for("react.portal"), H = Symbol.for("react.fragment"), le = Symbol.for("react.strict_mode"), ce = Symbol.for("react.profiler"), ue = Symbol.for("react.consumer"), de = Symbol.for("react.context"), K = Symbol.for("react.forward_ref"), Z = Symbol.for("react.suspense"), Q = Symbol.for("react.suspense_list"), D = Symbol.for("react.memo"), ee = Symbol.for("react.lazy"), Oe = Symbol.for("react.offscreen"), fe = Symbol.iterator, Ie = Symbol.for("react.client.reference"), L = w.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, pe = Object.prototype.hasOwnProperty, P = Object.assign, Le = Symbol.for("react.client.reference"), te = Array.isArray, Y = 0, ge, he, ve, me, xe, we, be;
+    var b = R, u = Symbol.for("react.transitional.element"), P = Symbol.for("react.portal"), q = Symbol.for("react.fragment"), le = Symbol.for("react.strict_mode"), ce = Symbol.for("react.profiler"), ue = Symbol.for("react.consumer"), de = Symbol.for("react.context"), F = Symbol.for("react.forward_ref"), H = Symbol.for("react.suspense"), Z = Symbol.for("react.suspense_list"), Q = Symbol.for("react.memo"), ee = Symbol.for("react.lazy"), Re = Symbol.for("react.offscreen"), fe = Symbol.iterator, De = Symbol.for("react.client.reference"), M = b.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, me = Object.prototype.hasOwnProperty, O = Object.assign, Me = Symbol.for("react.client.reference"), re = Array.isArray, $ = 0, pe, ve, he, ge, be, xe, we;
     v.__reactDisabledLog = !0;
-    var re, Ee, oe = !1, ne = new (typeof WeakMap == "function" ? WeakMap : Map)(), Pe = Symbol.for("react.client.reference"), ke, ye = {}, je = {}, Ce = {};
-    G.Fragment = H, G.jsx = function(e, r, o, g, S) {
-      return d(e, r, o, !1, g, S);
-    }, G.jsxs = function(e, r, o, g, S) {
-      return d(e, r, o, !0, g, S);
+    var te, Ne, oe = !1, ne = new (typeof WeakMap == "function" ? WeakMap : Map)(), Oe = Symbol.for("react.client.reference"), Ee, Ve = {}, je = {}, ye = {};
+    K.Fragment = q, K.jsxDEV = function(e, t, o, p, S, g) {
+      return c(e, t, o, p, S, g);
     };
-  }()), G;
+  }()), K;
 }
-var Re;
-function Ye() {
-  return Re || (Re = 1, process.env.NODE_ENV === "production" ? q.exports = $e() : q.exports = ze()), q.exports;
+var Se;
+function $e() {
+  return Se || (Se = 1, process.env.NODE_ENV === "production" ? B.exports = Ie() : B.exports = Le()), B.exports;
 }
-var n = Ye();
-const ie = Ve(null), Ne = Ve(null);
+var n = $e();
+const ie = Ue(null), Te = Ue(null);
 function se() {
-  const t = ae(ie);
-  if (!t)
+  const r = ae(ie);
+  if (!r)
     throw new Error("useVariations must be used within a VariationsProvider");
-  return t;
+  return r;
 }
-function Je() {
-  const t = ae(Ne);
-  if (!t)
-    throw new Error("useVariationsState must be used within a VariationsProvider");
-  return t;
+function Be() {
+  const r = ae(Te);
+  if (!r)
+    throw new Error(
+      "useVariationsState must be used within a VariationsProvider"
+    );
+  return [r.state, r.setState];
 }
-function Xe(t) {
-  const {
-    activeIds: m,
-    setActiveId: y,
-    variations: v
-  } = se(), l = m.get(t), p = I(() => Array.from(v.entries()).filter(([, u]) => u.group === t).map(([u, {
-    label: x
-  }]) => ({
-    id: u,
-    label: x
-  })), [v, t]);
+function Je(r) {
+  const { activeIds: x, setActiveId: y, variations: v } = se(), m = x.get(r), w = D(() => Array.from(v.entries()).filter(([, d]) => d.group === r).map(([d, { label: h }]) => ({
+    id: d,
+    label: h
+  })), [v, r]);
   return {
     /** The currently active variation */
-    active: I(() => {
-      if (!l) return null;
-      const u = v.get(l);
-      return u ? {
-        id: l,
-        label: u.label
-      } : null;
-    }, [l, v]),
+    active: D(() => {
+      if (!m) return null;
+      const d = v.get(m);
+      return d ? { id: m, label: d.label } : null;
+    }, [m, v]),
     /** Set the active variation by ID */
-    setActive: (u) => y(t, u),
+    setActive: (d) => y(r, d),
     /** All available variations for this group */
-    variations: p
+    variations: w
   };
 }
-function qe({
-  children: t,
-  disableQueryString: m = !1,
+function Ke({
+  children: r,
+  disableQueryString: x = !1,
   initialState: y
 }) {
-  const [v, l] = B(/* @__PURE__ */ new Map()), [p, k] = B(/* @__PURE__ */ new Map()), [u, x] = B(() => y);
-  J(() => {
-    if (m || typeof window > "u") return;
-    const d = new URLSearchParams(window.location.search), a = d.get("var");
+  const [v, m] = Y(
+    /* @__PURE__ */ new Map()
+  ), [w, E] = Y(
+    /* @__PURE__ */ new Map()
+  ), [d, h] = Y(
+    () => y
+  );
+  W(() => {
+    if (x || typeof window > "u") return;
+    const c = new URLSearchParams(window.location.search), a = c.get("var");
     if (a)
       try {
-        const s = a.split("_").map((h) => {
-          const [w, f] = h.split(".");
-          if (!w || !f) throw new Error("Invalid format");
-          return [w, f];
+        const s = a.split("_").map((f) => {
+          const [b, u] = f.split(".");
+          if (!b || !u) throw new Error("Invalid format");
+          return [b, u];
         });
-        l(new Map(s));
+        m(new Map(s));
       } catch {
-        l(/* @__PURE__ */ new Map());
+        m(/* @__PURE__ */ new Map());
       }
-    const i = d.get("state");
+    const i = c.get("s");
     if (i)
       try {
-        const s = JSON.parse(decodeURIComponent(i));
-        x(s);
+        const s = JSON.parse(atob(i));
+        h(s);
       } catch {
       }
-  }, [m]), J(() => {
-    if (m || typeof window > "u") return;
-    const d = new URLSearchParams(window.location.search), a = Array.from(v.entries());
-    if (a.length === 0)
-      d.delete("var");
-    else {
-      const h = a.map(([w, f]) => `${w}.${f}`).join("_");
-      d.set("var", h);
+  }, [x]), W(() => {
+    if (x || typeof window > "u") return;
+    const c = new URLSearchParams(), a = Array.from(v.entries());
+    if (a.length > 0) {
+      const f = a.map(([b, u]) => `${b}.${u}`).join("_");
+      c.set("var", f);
     }
-    u !== void 0 ? d.set("state", encodeURIComponent(JSON.stringify(u))) : d.delete("state");
-    const i = d.toString(), s = i ? `${window.location.pathname}?${i}` : window.location.pathname;
+    if (d !== void 0) {
+      const f = btoa(JSON.stringify(d));
+      c.set("s", f);
+    }
+    const i = c.toString(), s = i ? `${window.location.pathname}?${i}` : window.location.pathname;
     window.history.replaceState({}, "", s);
-  }, [v, u, m]), J(() => {
-    if (m || typeof window > "u") return;
-    const d = () => {
+  }, [v, d, x]), W(() => {
+    if (x || typeof window > "u") return;
+    const c = () => {
       const a = new URLSearchParams(window.location.search), i = a.get("var");
       if (i)
         try {
-          const h = i.split("_").map((w) => {
-            const [f, R] = w.split(".");
-            if (!f || !R) throw new Error("Invalid format");
-            return [f, R];
+          const f = i.split("_").map((b) => {
+            const [u, P] = b.split(".");
+            if (!u || !P) throw new Error("Invalid format");
+            return [u, P];
           });
-          l(new Map(h));
+          m(new Map(f));
         } catch {
-          l(/* @__PURE__ */ new Map());
+          m(/* @__PURE__ */ new Map());
         }
       else
-        l(/* @__PURE__ */ new Map());
-      const s = a.get("state");
+        m(/* @__PURE__ */ new Map());
+      const s = a.get("s");
       if (s)
         try {
-          const h = JSON.parse(decodeURIComponent(s));
-          x(h);
+          const f = JSON.parse(atob(s));
+          h(f);
         } catch {
         }
     };
-    return window.addEventListener("popstate", d), () => window.removeEventListener("popstate", d);
-  }, [m]);
-  const j = I(() => {
-    const d = v.get("root");
-    if (!d) return null;
-    const a = (s, h) => {
-      const w = {
+    return window.addEventListener("popstate", c), () => window.removeEventListener("popstate", c);
+  }, [x]);
+  const V = D(() => {
+    const c = v.get("root");
+    if (!c) return null;
+    const a = (s, f) => {
+      const b = {
         id: s,
-        group: h,
+        group: f,
         children: /* @__PURE__ */ new Map()
       };
-      return Array.from(p.entries()).forEach(([, f]) => {
-        if (f.parentId === s) {
-          const R = v.get(f.group);
-          R && w.children.set(f.group, a(R, f.group));
+      return Array.from(w.entries()).forEach(([, u]) => {
+        if (u.parentId === s) {
+          const P = v.get(u.group);
+          P && b.children.set(
+            u.group,
+            a(P, u.group)
+          );
         }
-      }), w;
+      }), b;
     };
-    return a(d, "root");
-  }, [v, p]), A = Se((d, a) => {
-    l((i) => {
-      const s = new Map(i);
-      return s.set(d, a), d === "root" ? Array.from(i.keys()).forEach((h) => {
-        h !== "root" && s.delete(h);
-      }) : Array.from(p.entries()).find(([w]) => w === a) && Array.from(i.keys()).forEach((w) => {
-        const f = Array.from(p.entries()).find(([, R]) => R.group === w);
-        f && f[1].parentId === a && s.delete(w);
-      }), s;
-    });
-  }, [p]), C = Se((d, a, i, s, h) => {
-    k((w) => {
-      const f = w.get(a);
-      if ((f == null ? void 0 : f.group) === d && (f == null ? void 0 : f.label) === i && (f == null ? void 0 : f.groupLabel) === s && (f == null ? void 0 : f.parentId) === h)
-        return w;
-      const R = new Map(w);
-      return R.set(a, {
-        group: d,
-        label: i,
-        groupLabel: s,
-        parentId: h
-      }), R;
-    });
-  }, []), _ = I(() => ({
-    activeIds: v,
-    setActiveId: A,
-    registerVariation: C,
-    variations: p,
-    activeTree: j
-  }), [v, A, C, p, j]), b = I(() => ({
-    state: u,
-    setState: (d) => {
-      x(d);
-    }
-  }), [u]);
-  return /* @__PURE__ */ n.jsx(ie.Provider, { value: _, children: /* @__PURE__ */ n.jsx(Ne.Provider, { value: b, children: t }) });
+    return a(c, "root");
+  }, [v, w]), C = Ce(
+    (c, a) => {
+      m((i) => {
+        const s = new Map(i);
+        return s.set(c, a), c === "root" ? Array.from(i.keys()).forEach((f) => {
+          f !== "root" && s.delete(f);
+        }) : Array.from(w.entries()).find(
+          ([b]) => b === a
+        ) && Array.from(i.keys()).forEach((b) => {
+          const u = Array.from(w.entries()).find(
+            ([, P]) => P.group === b
+          );
+          u && u[1].parentId === a && s.delete(b);
+        }), s;
+      });
+    },
+    [w]
+  ), j = Ce(
+    (c, a, i, s, f) => {
+      E((b) => {
+        const u = b.get(a);
+        if ((u == null ? void 0 : u.group) === c && (u == null ? void 0 : u.label) === i && (u == null ? void 0 : u.groupLabel) === s && (u == null ? void 0 : u.parentId) === f)
+          return b;
+        const P = new Map(b);
+        return P.set(a, { group: c, label: i, groupLabel: s, parentId: f }), P;
+      });
+    },
+    []
+  ), A = D(
+    () => ({
+      activeIds: v,
+      setActiveId: C,
+      registerVariation: j,
+      variations: w,
+      activeTree: V
+    }),
+    [
+      v,
+      C,
+      j,
+      w,
+      V
+    ]
+  ), N = D(
+    () => ({
+      state: d,
+      setState: (c) => {
+        h(c);
+      }
+    }),
+    [d]
+  );
+  return /* @__PURE__ */ n.jsxDEV(ie.Provider, { value: A, children: /* @__PURE__ */ n.jsxDEV(Te.Provider, { value: N, children: r }, void 0, !1, {
+    fileName: "/Users/dperrera/Projects/variations/src/VariationsProvider.tsx",
+    lineNumber: 330,
+    columnNumber: 7
+  }, this) }, void 0, !1, {
+    fileName: "/Users/dperrera/Projects/variations/src/VariationsProvider.tsx",
+    lineNumber: 329,
+    columnNumber: 5
+  }, this);
 }
-function F(t) {
-  return t.toLowerCase().replace(/\s+/g, "-");
+function X(r) {
+  return r.toLowerCase().replace(/\s+/g, "-");
 }
-function Me({
-  label: t,
-  children: m,
+function _e({
+  label: r,
+  children: x,
   ...y
 }) {
-  const {
-    group: v = "",
-    id: l,
-    groupLabel: p,
-    parentId: k
-  } = y, u = I(() => l || F(t), [l, t]), {
-    activeIds: x,
-    registerVariation: j
-  } = se(), A = x.get(v) === u;
-  return J(() => {
+  const { group: v = "", id: m, groupLabel: w, parentId: E } = y, d = D(() => m || X(r), [m, r]), { activeIds: h, registerVariation: V } = se(), C = h.get(v) === d;
+  return W(() => {
     if (!v) {
-      console.error(`Variation Component Error: No group provided for variation "${t}"
+      console.error(
+        `Variation Component Error: No group provided for variation "${r}"
 
 This usually means one of two things:
 1. You forgot to add "use client" at the top of your page component
@@ -632,31 +636,34 @@ To fix this:
 
 2. Make sure your Variation is wrapped in a Variations component:
    <Variations label="My Variations">
-     <Variation label="${t}">
+     <Variation label="${r}">
        {children}
      </Variation>
-   </Variations>`);
+   </Variations>`
+      );
       return;
     }
-    j(v, u, t, p || v, k);
-  }, [v, u, t, p, k, j]), A ? /* @__PURE__ */ n.jsx(n.Fragment, { children: m }) : null;
+    V(v, d, r, w || v, E);
+  }, [v, d, r, w, E, V]), C ? /* @__PURE__ */ n.jsxDEV(n.Fragment, { children: x }, void 0, !1, {
+    fileName: "/Users/dperrera/Projects/variations/src/Variation.tsx",
+    lineNumber: 47,
+    columnNumber: 10
+  }, this) : null;
 }
-const Ue = "root";
-function We(t) {
-  return O.isValidElement(t) && t.type === Me && typeof t.props.label == "string";
+const ze = "root";
+function Ye(r) {
+  return R.isValidElement(r) && r.type === _e && typeof r.props.label == "string";
 }
-function Ge({
-  isRoot: t = !1,
-  label: m,
+function We({
+  isRoot: r = !1,
+  label: x,
   children: y,
   ...v
 }) {
-  const {
-    parentId: l,
-    group: p
-  } = v, k = ae(ie);
-  if (!k)
-    throw new Error(`Variations component error: No VariationsContext found.
+  const { parentId: m, group: w } = v, E = ae(ie);
+  if (!E)
+    throw new Error(
+      `Variations component error: No VariationsContext found.
 
 This usually means one of two things:
 1. You forgot to add "use client" at the top of your page component
@@ -667,80 +674,128 @@ To fix this:
    "use client";
    export default function Page() { ... }
 
-2. Or check that VariationsProvider exists in your app layout`);
-  if (t && l)
-    throw new Error(`Variations component error: Cannot use isRoot in a nested Variations component.
+2. Or check that VariationsProvider exists in your app layout`
+    );
+  if (r && m)
+    throw new Error(
+      `Variations component error: Cannot use isRoot in a nested Variations component.
 
 The isRoot prop can only be used on the top-level Variations component.
-Remove the isRoot prop from any nested Variations components.`);
-  const u = p || (t ? Ue : F(m)), {
-    activeIds: x,
-    setActiveId: j,
-    variations: A
-  } = k, C = I(() => {
-    const b = /* @__PURE__ */ new Map();
-    return Array.from(A.entries()).forEach(([d, a]) => {
-      const {
-        group: i,
-        label: s,
-        groupLabel: h
-      } = a;
-      b.has(i) || b.set(i, []), b.get(i).push([d, {
-        label: s,
-        groupLabel: h
-      }]);
-    }), b;
-  }, [A]), _ = I(() => O.Children.map(y, (b) => {
-    if (O.isValidElement(b)) {
-      if (b.type === Me) {
-        if (!We(b))
+Remove the isRoot prop from any nested Variations components.`
+    );
+  const d = w || (r ? ze : X(x)), { activeIds: h, setActiveId: V, variations: C } = E, j = D(() => {
+    const N = /* @__PURE__ */ new Map();
+    return Array.from(C.entries()).forEach(([c, a]) => {
+      const { group: i, label: s, groupLabel: f } = a;
+      N.has(i) || N.set(i, []), N.get(i).push([c, { label: s, groupLabel: f }]);
+    }), N;
+  }, [C]), A = D(() => R.Children.map(y, (N) => {
+    if (R.isValidElement(N)) {
+      if (N.type === _e) {
+        if (!Ye(N))
           throw new Error("Invalid Variation component");
-        const d = F(b.props.label);
-        return O.cloneElement(b, {
-          ...b.props,
-          group: u,
-          groupLabel: m,
-          id: d,
-          parentId: l
+        const c = X(N.props.label);
+        return R.cloneElement(N, {
+          ...N.props,
+          group: d,
+          groupLabel: x,
+          id: c,
+          parentId: m
         });
-      } else if (b.type === Ge) {
-        const d = b, a = x.get(u), i = F(d.props.label);
-        return O.cloneElement(d, {
-          ...d.props,
+      } else if (N.type === We) {
+        const c = N, a = h.get(d), i = X(c.props.label);
+        return R.cloneElement(c, {
+          ...c.props,
           parentId: a,
           group: i
         });
       }
     }
-    return b;
-  }), [y, u, m, x, l]);
-  return J(() => {
-    if (!x.has(u)) {
-      const b = C.get(u);
-      if (b && b.length > 0) {
-        const [d] = b[0];
-        j(u, d);
+    return N;
+  }), [y, d, x, h, m]);
+  return W(() => {
+    if (!h.has(d)) {
+      const N = j.get(d);
+      if (N && N.length > 0) {
+        const [c] = N[0];
+        V(d, c);
       }
     }
-  }, [u, C, x, j]), /* @__PURE__ */ n.jsx(n.Fragment, { children: _ });
+  }, [d, j, h, V]), /* @__PURE__ */ n.jsxDEV(n.Fragment, { children: A }, void 0, !1, {
+    fileName: "/Users/dperrera/Projects/variations/src/Variations.tsx",
+    lineNumber: 133,
+    columnNumber: 10
+  }, this);
 }
-const _e = ({
-  group: t,
-  variations: m,
+const Ae = ({
+  group: r,
+  variations: x,
   activeIds: y,
   setActiveId: v,
-  isMinimized: l
+  isMinimized: m
 }) => {
-  var u, x, j, A;
-  const p = (x = (u = m[0]) == null ? void 0 : u[1]) == null ? void 0 : x.groupLabel, k = y.get(t);
-  return /* @__PURE__ */ n.jsxs("div", { className: "variation-group", children: [
-    /* @__PURE__ */ n.jsx("div", { className: "variation-title", title: p, children: p }),
-    /* @__PURE__ */ n.jsx("div", { className: "variations-selects", children: /* @__PURE__ */ n.jsx("select", { value: k || "", onChange: (C) => {
-      v(t, C.target.value);
-    }, className: "variation-select", tabIndex: l ? -1 : 0, title: ((A = (j = m.find(([C]) => C === k)) == null ? void 0 : j[1]) == null ? void 0 : A.label) || "", children: m.map(([C, {
-      label: _
-    }]) => /* @__PURE__ */ n.jsx("option", { value: C, title: _, children: _ }, C)) }) }),
-    /* @__PURE__ */ n.jsx("style", { children: `
+  var d, h, V, C;
+  const w = (h = (d = x[0]) == null ? void 0 : d[1]) == null ? void 0 : h.groupLabel, E = y.get(r);
+  return /* @__PURE__ */ n.jsxDEV("div", { className: "variation-group", children: [
+    /* @__PURE__ */ n.jsxDEV(
+      "div",
+      {
+        className: "variation-title",
+        title: w,
+        children: w
+      },
+      void 0,
+      !1,
+      {
+        fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+        lineNumber: 24,
+        columnNumber: 7
+      },
+      void 0
+    ),
+    /* @__PURE__ */ n.jsxDEV("div", { className: "variations-selects", children: /* @__PURE__ */ n.jsxDEV(
+      "select",
+      {
+        value: E || "",
+        onChange: (j) => {
+          v(r, j.target.value);
+        },
+        className: "variation-select",
+        tabIndex: m ? -1 : 0,
+        title: ((C = (V = x.find(([j]) => j === E)) == null ? void 0 : V[1]) == null ? void 0 : C.label) || "",
+        children: x.map(
+          ([j, { label: A }]) => /* @__PURE__ */ n.jsxDEV(
+            "option",
+            {
+              value: j,
+              title: A,
+              children: A
+            },
+            j,
+            !1,
+            {
+              fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+              lineNumber: 41,
+              columnNumber: 11
+            },
+            void 0
+          )
+        )
+      },
+      void 0,
+      !1,
+      {
+        fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+        lineNumber: 31,
+        columnNumber: 9
+      },
+      void 0
+    ) }, void 0, !1, {
+      fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+      lineNumber: 30,
+      columnNumber: 7
+    }, void 0),
+    /* @__PURE__ */ n.jsxDEV("style", { children: `
           .variation-group {
             display: flex;
             flex-direction: row;
@@ -833,62 +888,109 @@ const _e = ({
               background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L4 6L7 3' stroke='%23111111' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
             }
           }
-        ` })
-  ] });
+        ` }, void 0, !1, {
+      fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+      lineNumber: 51,
+      columnNumber: 7
+    }, void 0)
+  ] }, void 0, !0, {
+    fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+    lineNumber: 23,
+    columnNumber: 5
+  }, void 0);
 };
-function Fe({
-  position: t = "bottom-right",
-  minimizedByDefault: m = !1,
+function Xe({
+  position: r = "bottom-right",
+  minimizedByDefault: x = !1,
   className: y,
   ...v
 }) {
-  const [l, p] = B(m), [k, u] = B(!1), {
-    activeIds: x,
-    setActiveId: j,
-    variations: A
-  } = se(), C = () => {
-    const a = new URLSearchParams(window.location.search), i = Array.from(x.entries());
+  const [m, w] = Y(x), [E, d] = Y(!1), { activeIds: h, setActiveId: V, variations: C } = se(), j = () => {
+    const a = new URLSearchParams(window.location.search), i = Array.from(h.entries());
     if (i.length > 0) {
-      const w = i.map(([f, R]) => `${f}.${R}`).join("_");
-      a.set("var", w);
+      const b = i.map(([u, P]) => `${u}.${P}`).join("_");
+      a.set("var", b);
     } else
       a.delete("var");
-    const s = a.toString(), h = window.location.href.split("?")[0] + (s ? `?${s}` : "");
-    navigator.clipboard.writeText(h).then(() => {
-      u(!0), setTimeout(() => u(!1), 2e3);
+    const s = a.toString(), f = window.location.href.split("?")[0] + (s ? `?${s}` : "");
+    navigator.clipboard.writeText(f).then(() => {
+      d(!0), setTimeout(() => d(!1), 2e3);
     });
-  }, _ = O.useMemo(() => {
+  }, A = R.useMemo(() => {
     const a = /* @__PURE__ */ new Map();
-    return Array.from(A.entries()).forEach(([i, s]) => {
-      const {
-        group: h,
-        label: w,
-        groupLabel: f
-      } = s;
-      a.has(h) || a.set(h, []), a.get(h).push([i, {
-        label: w,
-        groupLabel: f
-      }]);
+    return Array.from(C.entries()).forEach(([i, s]) => {
+      const { group: f, label: b, groupLabel: u } = s;
+      a.has(f) || a.set(f, []), a.get(f).push([i, { label: b, groupLabel: u }]);
     }), a;
-  }, [A]), d = (() => {
+  }, [C]), c = (() => {
     const a = [], i = /* @__PURE__ */ new Set();
-    if (_.has("root")) {
-      const s = _.get("root");
-      a.push(/* @__PURE__ */ n.jsx(_e, { group: "root", variations: s, activeIds: x, setActiveId: j, isMinimized: l }, "root")), i.add("root");
+    if (A.has("root")) {
+      const s = A.get("root");
+      a.push(
+        /* @__PURE__ */ n.jsxDEV(
+          Ae,
+          {
+            group: "root",
+            variations: s,
+            activeIds: h,
+            setActiveId: V,
+            isMinimized: m
+          },
+          "root",
+          !1,
+          {
+            fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+            lineNumber: 213,
+            columnNumber: 9
+          },
+          this
+        )
+      ), i.add("root");
     }
-    return Array.from(x.entries()).forEach(([s]) => {
-      if (!i.has(s) && _.has(s)) {
-        const h = _.get(s);
-        a.push(/* @__PURE__ */ n.jsx(_e, { group: s, variations: h, activeIds: x, setActiveId: j, isMinimized: l }, s)), i.add(s);
+    return Array.from(h.entries()).forEach(([s]) => {
+      if (!i.has(s) && A.has(s)) {
+        const f = A.get(s);
+        a.push(
+          /* @__PURE__ */ n.jsxDEV(
+            Ae,
+            {
+              group: s,
+              variations: f,
+              activeIds: h,
+              setActiveId: V,
+              isMinimized: m
+            },
+            s,
+            !1,
+            {
+              fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+              lineNumber: 230,
+              columnNumber: 11
+            },
+            this
+          )
+        ), i.add(s);
       }
-    }), a.length === 0 ? /* @__PURE__ */ n.jsxs("div", { className: "variations-empty", children: [
-      /* @__PURE__ */ n.jsx("div", { className: "variations-empty-title", children: "No Variations Found" }),
-      /* @__PURE__ */ n.jsxs("div", { className: "variations-empty-text", children: [
+    }), a.length === 0 ? /* @__PURE__ */ n.jsxDEV("div", { className: "variations-empty", children: [
+      /* @__PURE__ */ n.jsxDEV("div", { className: "variations-empty-title", children: "No Variations Found" }, void 0, !1, {
+        fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+        lineNumber: 246,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ n.jsxDEV("div", { className: "variations-empty-text", children: [
         "Add a ",
-        /* @__PURE__ */ n.jsx("code", { children: "<Variations>" }),
+        /* @__PURE__ */ n.jsxDEV("code", { children: "<Variations>" }, void 0, !1, {
+          fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+          lineNumber: 248,
+          columnNumber: 19
+        }, this),
         " component!"
-      ] }),
-      /* @__PURE__ */ n.jsx("style", { children: `
+      ] }, void 0, !0, {
+        fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+        lineNumber: 247,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ n.jsxDEV("style", { children: `
               .variations-empty {
                 display: flex;
                 flex-direction: column;
@@ -926,54 +1028,304 @@ function Fe({
                   background: rgba(255, 255, 255, 0.1);
                 }
               }
-            ` })
-    ] }) : a;
+            ` }, void 0, !1, {
+        fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+        lineNumber: 250,
+        columnNumber: 11
+      }, this)
+    ] }, void 0, !0, {
+      fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+      lineNumber: 245,
+      columnNumber: 9
+    }, this) : a;
   })();
-  return O.useEffect(() => {
+  return R.useEffect(() => {
     const a = (i) => {
-      i.code === "KeyV" && i.altKey && !i.ctrlKey && !i.shiftKey && !i.metaKey && (i.preventDefault(), p((s) => !s));
+      i.code === "KeyV" && i.altKey && !i.ctrlKey && !i.shiftKey && !i.metaKey && (i.preventDefault(), w((s) => !s));
     };
     return window.addEventListener("keydown", a), () => window.removeEventListener("keydown", a);
-  }, []), /* @__PURE__ */ n.jsxs("div", { className: `variations-controls-container ${y || ""}`, ...v, children: [
-    /* @__PURE__ */ n.jsx("div", { className: `variations-controls ${l ? "minimized" : ""}`, children: l ? /* @__PURE__ */ n.jsx("button", { className: "variations-circle", onClick: () => p(!1), tabIndex: l ? 0 : -1, children: /* @__PURE__ */ n.jsxs("svg", { xmlns: "http://www.w3.org/2000/svg", width: "18", height: "18", viewBox: "0 0 24 24", fill: "currentColor", stroke: "currentColor", strokeWidth: "1", strokeLinecap: "round", strokeLinejoin: "round", children: [
-      /* @__PURE__ */ n.jsx("path", { d: "M15.536 11.293a1 1 0 0 0 0 1.414l2.376 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z" }),
-      /* @__PURE__ */ n.jsx("path", { d: "M2.297 11.293a1 1 0 0 0 0 1.414l2.377 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414L6.088 8.916a1 1 0 0 0-1.414 0z" }),
-      /* @__PURE__ */ n.jsx("path", { d: "M8.916 17.912a1 1 0 0 0 0 1.415l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.415l-2.377-2.376a1 1 0 0 0-1.414 0z" }),
-      /* @__PURE__ */ n.jsx("path", { d: "M8.916 4.674a1 1 0 0 0 0 1.414l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z" })
-    ] }) }) : /* @__PURE__ */ n.jsxs(n.Fragment, { children: [
-      /* @__PURE__ */ n.jsxs("div", { className: "variations-header", children: [
-        /* @__PURE__ */ n.jsxs("div", { className: "variations-header-title", children: [
-          /* @__PURE__ */ n.jsxs("svg", { xmlns: "http://www.w3.org/2000/svg", width: "12", height: "12", viewBox: "0 0 24 24", fill: "currentColor", stroke: "currentColor", strokeWidth: "1", strokeLinecap: "square", strokeLinejoin: "round", style: {
-            marginRight: "6px",
-            position: "relative"
-          }, children: [
-            /* @__PURE__ */ n.jsx("path", { d: "M15.536 11.293a1 1 0 0 0 0 1.414l2.376 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z" }),
-            /* @__PURE__ */ n.jsx("path", { d: "M2.297 11.293a1 1 0 0 0 0 1.414l2.377 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414L6.088 8.916a1 1 0 0 0-1.414 0z" }),
-            /* @__PURE__ */ n.jsx("path", { d: "M8.916 17.912a1 1 0 0 0 0 1.415l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.415l-2.377-2.376a1 1 0 0 0-1.414 0z" }),
-            /* @__PURE__ */ n.jsx("path", { d: "M8.916 4.674a1 1 0 0 0 0 1.414l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z" })
-          ] }),
-          "Variations"
-        ] }),
-        /* @__PURE__ */ n.jsxs("div", { className: "variations-header-actions", children: [
-          /* @__PURE__ */ n.jsx("button", { className: "variations-header-button", onClick: C, title: "Copy link to clipboard", tabIndex: l ? -1 : 0, children: k ? /* @__PURE__ */ n.jsx("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ n.jsx("path", { d: "M20 6L9 17L4 12", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round", strokeLinejoin: "round" }) }) : /* @__PURE__ */ n.jsxs("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: [
-            /* @__PURE__ */ n.jsx("path", { d: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round", strokeLinejoin: "round" }),
-            /* @__PURE__ */ n.jsx("path", { d: "M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round", strokeLinejoin: "round" })
-          ] }) }),
-          /* @__PURE__ */ n.jsx("button", { className: "variations-header-toggle", onClick: () => p(!0), tabIndex: l ? -1 : 0, children: "×" })
-        ] })
-      ] }),
-      /* @__PURE__ */ n.jsx("div", { className: "variation-groups", children: d })
-    ] }) }),
-    /* @__PURE__ */ n.jsx("style", { children: `
+  }, []), /* @__PURE__ */ n.jsxDEV(
+    "div",
+    {
+      className: `variations-controls-container ${y || ""}`,
+      ...v,
+      children: [
+        /* @__PURE__ */ n.jsxDEV("div", { className: `variations-controls ${m ? "minimized" : ""}`, children: m ? /* @__PURE__ */ n.jsxDEV(
+          "button",
+          {
+            className: "variations-circle",
+            onClick: () => w(!1),
+            tabIndex: m ? 0 : -1,
+            children: /* @__PURE__ */ n.jsxDEV(
+              "svg",
+              {
+                xmlns: "http://www.w3.org/2000/svg",
+                width: "18",
+                height: "18",
+                viewBox: "0 0 24 24",
+                fill: "currentColor",
+                stroke: "currentColor",
+                strokeWidth: "1",
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+                children: [
+                  /* @__PURE__ */ n.jsxDEV("path", { d: "M15.536 11.293a1 1 0 0 0 0 1.414l2.376 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z" }, void 0, !1, {
+                    fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                    lineNumber: 342,
+                    columnNumber: 15
+                  }, this),
+                  /* @__PURE__ */ n.jsxDEV("path", { d: "M2.297 11.293a1 1 0 0 0 0 1.414l2.377 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414L6.088 8.916a1 1 0 0 0-1.414 0z" }, void 0, !1, {
+                    fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                    lineNumber: 343,
+                    columnNumber: 15
+                  }, this),
+                  /* @__PURE__ */ n.jsxDEV("path", { d: "M8.916 17.912a1 1 0 0 0 0 1.415l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.415l-2.377-2.376a1 1 0 0 0-1.414 0z" }, void 0, !1, {
+                    fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                    lineNumber: 344,
+                    columnNumber: 15
+                  }, this),
+                  /* @__PURE__ */ n.jsxDEV("path", { d: "M8.916 4.674a1 1 0 0 0 0 1.414l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z" }, void 0, !1, {
+                    fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                    lineNumber: 345,
+                    columnNumber: 15
+                  }, this)
+                ]
+              },
+              void 0,
+              !0,
+              {
+                fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                lineNumber: 331,
+                columnNumber: 13
+              },
+              this
+            )
+          },
+          void 0,
+          !1,
+          {
+            fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+            lineNumber: 326,
+            columnNumber: 9
+          },
+          this
+        ) : /* @__PURE__ */ n.jsxDEV(n.Fragment, { children: [
+          /* @__PURE__ */ n.jsxDEV("div", { className: "variations-header", children: [
+            /* @__PURE__ */ n.jsxDEV("div", { className: "variations-header-title", children: [
+              /* @__PURE__ */ n.jsxDEV(
+                "svg",
+                {
+                  xmlns: "http://www.w3.org/2000/svg",
+                  width: "12",
+                  height: "12",
+                  viewBox: "0 0 24 24",
+                  fill: "currentColor",
+                  stroke: "currentColor",
+                  strokeWidth: "1",
+                  strokeLinecap: "square",
+                  strokeLinejoin: "round",
+                  style: {
+                    marginRight: "6px",
+                    position: "relative"
+                  },
+                  children: [
+                    /* @__PURE__ */ n.jsxDEV("path", { d: "M15.536 11.293a1 1 0 0 0 0 1.414l2.376 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z" }, void 0, !1, {
+                      fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                      lineNumber: 367,
+                      columnNumber: 19
+                    }, this),
+                    /* @__PURE__ */ n.jsxDEV("path", { d: "M2.297 11.293a1 1 0 0 0 0 1.414l2.377 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414L6.088 8.916a1 1 0 0 0-1.414 0z" }, void 0, !1, {
+                      fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                      lineNumber: 368,
+                      columnNumber: 19
+                    }, this),
+                    /* @__PURE__ */ n.jsxDEV("path", { d: "M8.916 17.912a1 1 0 0 0 0 1.415l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.415l-2.377-2.376a1 1 0 0 0-1.414 0z" }, void 0, !1, {
+                      fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                      lineNumber: 369,
+                      columnNumber: 19
+                    }, this),
+                    /* @__PURE__ */ n.jsxDEV("path", { d: "M8.916 4.674a1 1 0 0 0 0 1.414l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z" }, void 0, !1, {
+                      fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                      lineNumber: 370,
+                      columnNumber: 19
+                    }, this)
+                  ]
+                },
+                void 0,
+                !0,
+                {
+                  fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                  lineNumber: 352,
+                  columnNumber: 17
+                },
+                this
+              ),
+              "Variations"
+            ] }, void 0, !0, {
+              fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+              lineNumber: 351,
+              columnNumber: 15
+            }, this),
+            /* @__PURE__ */ n.jsxDEV("div", { className: "variations-header-actions", children: [
+              /* @__PURE__ */ n.jsxDEV(
+                "button",
+                {
+                  className: "variations-header-button",
+                  onClick: j,
+                  title: "Copy link to clipboard",
+                  tabIndex: m ? -1 : 0,
+                  children: E ? /* @__PURE__ */ n.jsxDEV(
+                    "svg",
+                    {
+                      width: "12",
+                      height: "12",
+                      viewBox: "0 0 24 24",
+                      fill: "none",
+                      xmlns: "http://www.w3.org/2000/svg",
+                      children: /* @__PURE__ */ n.jsxDEV(
+                        "path",
+                        {
+                          d: "M20 6L9 17L4 12",
+                          stroke: "currentColor",
+                          strokeWidth: "2.5",
+                          strokeLinecap: "round",
+                          strokeLinejoin: "round"
+                        },
+                        void 0,
+                        !1,
+                        {
+                          fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                          lineNumber: 389,
+                          columnNumber: 23
+                        },
+                        this
+                      )
+                    },
+                    void 0,
+                    !1,
+                    {
+                      fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                      lineNumber: 382,
+                      columnNumber: 17
+                    },
+                    this
+                  ) : /* @__PURE__ */ n.jsxDEV(
+                    "svg",
+                    {
+                      width: "12",
+                      height: "12",
+                      viewBox: "0 0 24 24",
+                      fill: "none",
+                      xmlns: "http://www.w3.org/2000/svg",
+                      children: [
+                        /* @__PURE__ */ n.jsxDEV(
+                          "path",
+                          {
+                            d: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71",
+                            stroke: "currentColor",
+                            strokeWidth: "2.5",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                          },
+                          void 0,
+                          !1,
+                          {
+                            fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                            lineNumber: 405,
+                            columnNumber: 23
+                          },
+                          this
+                        ),
+                        /* @__PURE__ */ n.jsxDEV(
+                          "path",
+                          {
+                            d: "M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71",
+                            stroke: "currentColor",
+                            strokeWidth: "2.5",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                          },
+                          void 0,
+                          !1,
+                          {
+                            fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                            lineNumber: 412,
+                            columnNumber: 23
+                          },
+                          this
+                        )
+                      ]
+                    },
+                    void 0,
+                    !0,
+                    {
+                      fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                      lineNumber: 398,
+                      columnNumber: 17
+                    },
+                    this
+                  )
+                },
+                void 0,
+                !1,
+                {
+                  fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                  lineNumber: 375,
+                  columnNumber: 17
+                },
+                this
+              ),
+              /* @__PURE__ */ n.jsxDEV(
+                "button",
+                {
+                  className: "variations-header-toggle",
+                  onClick: () => w(!0),
+                  tabIndex: m ? -1 : 0,
+                  children: "×"
+                },
+                void 0,
+                !1,
+                {
+                  fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+                  lineNumber: 422,
+                  columnNumber: 17
+                },
+                this
+              )
+            ] }, void 0, !0, {
+              fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+              lineNumber: 374,
+              columnNumber: 15
+            }, this)
+          ] }, void 0, !0, {
+            fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+            lineNumber: 350,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ n.jsxDEV("div", { className: "variation-groups", children: c }, void 0, !1, {
+            fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+            lineNumber: 432,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, !0, {
+          fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+          lineNumber: 349,
+          columnNumber: 9
+        }, this) }, void 0, !1, {
+          fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+          lineNumber: 324,
+          columnNumber: 7
+        }, this),
+        /* @__PURE__ */ n.jsxDEV("style", { children: `
           .variations-controls {
             font-family: system-ui, -apple-system, sans-serif;
             position: fixed;
-            ${t.includes("right") ? "right: 16px;" : t.includes("center") ? "left: 50%; transform: translateX(-50%);" : "left: 16px;"}
-            ${t.includes("bottom") ? "bottom: 16px;" : t.includes("middle") ? "top: 50%; transform: translateY(-50%);" : "top: 16px;"}
-            ${t.includes("middle") && t.includes("right") ? "transform: translateY(-50%);" : ""}
-            ${t.includes("middle") && t.includes("left") ? "transform: translateY(-50%);" : ""}
-            ${t.includes("center") && t.includes("bottom") ? "transform: translateX(-50%);" : ""}
-            ${t.includes("center") && t.includes("top") ? "transform: translateX(-50%);" : ""}
+            ${r.includes("right") ? "right: 16px;" : r.includes("center") ? "left: 50%; transform: translateX(-50%);" : "left: 16px;"}
+            ${r.includes("bottom") ? "bottom: 16px;" : r.includes("middle") ? "top: 50%; transform: translateY(-50%);" : "top: 16px;"}
+            ${r.includes("middle") && r.includes("right") ? "transform: translateY(-50%);" : ""}
+            ${r.includes("middle") && r.includes("left") ? "transform: translateY(-50%);" : ""}
+            ${r.includes("center") && r.includes("bottom") ? "transform: translateX(-50%);" : ""}
+            ${r.includes("center") && r.includes("top") ? "transform: translateX(-50%);" : ""}
             width: 280px;
             height: auto;
             max-height: calc(100vh - 32px);
@@ -992,12 +1344,12 @@ function Fe({
             padding: 0;
             border-radius: 16px;
             background: white;
-            ${t.includes("right") ? "right: 16px;" : t.includes("center") ? "left: 50%; transform: translateX(-50%);" : "left: 16px;"}
-            ${t.includes("bottom") ? "bottom: 16px;" : t.includes("middle") ? "top: 50%; transform: translateY(-50%);" : "top: 16px;"}
-            ${t.includes("middle") && t.includes("right") ? "transform: translateY(-50%);" : ""}
-            ${t.includes("middle") && t.includes("left") ? "transform: translateY(-50%);" : ""}
-            ${t.includes("center") && t.includes("bottom") ? "transform: translateX(-50%);" : ""}
-            ${t.includes("center") && t.includes("top") ? "transform: translateX(-50%);" : ""}
+            ${r.includes("right") ? "right: 16px;" : r.includes("center") ? "left: 50%; transform: translateX(-50%);" : "left: 16px;"}
+            ${r.includes("bottom") ? "bottom: 16px;" : r.includes("middle") ? "top: 50%; transform: translateY(-50%);" : "top: 16px;"}
+            ${r.includes("middle") && r.includes("right") ? "transform: translateY(-50%);" : ""}
+            ${r.includes("middle") && r.includes("left") ? "transform: translateY(-50%);" : ""}
+            ${r.includes("center") && r.includes("bottom") ? "transform: translateX(-50%);" : ""}
+            ${r.includes("center") && r.includes("top") ? "transform: translateX(-50%);" : ""}
           }
 
           .variations-circle {
@@ -1157,15 +1509,29 @@ function Fe({
               color: #111111;
             }
           }
-        ` })
-  ] });
+        ` }, void 0, !1, {
+          fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+          lineNumber: 436,
+          columnNumber: 7
+        }, this)
+      ]
+    },
+    void 0,
+    !0,
+    {
+      fileName: "/Users/dperrera/Projects/variations/src/VariationsControls.tsx",
+      lineNumber: 320,
+      columnNumber: 5
+    },
+    this
+  );
 }
 export {
-  Me as Variation,
-  Ge as Variations,
-  Fe as VariationsControls,
-  qe as VariationsProvider,
-  Xe as useVariation,
+  _e as Variation,
+  We as Variations,
+  Xe as VariationsControls,
+  Ke as VariationsProvider,
+  Je as useVariation,
   se as useVariations,
-  Je as useVariationsState
+  Be as useVariationsState
 };

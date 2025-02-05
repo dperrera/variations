@@ -1,9 +1,11 @@
 import { VariationsContextType, VariationsStateContextType } from './types';
-import { VariationsProviderProps } from './internal-types';
 export declare const VariationsContext: import('react').Context<VariationsContextType<string, string> | null>;
-export declare const VariationsStateContext: import('react').Context<VariationsStateContextType<unknown> | null>;
+export declare const VariationsStateContext: import('react').Context<VariationsStateContextType<any> | null>;
 export declare function useVariations<TGroup extends string = string, TId extends string = string>(): VariationsContextType<TGroup, TId>;
-export declare function useVariationsState<TState = unknown>(): VariationsStateContextType<TState>;
+export declare function useVariationsState<TState = unknown>(): [
+    TState,
+    (valueOrUpdater: TState | ((prev: TState) => TState)) => void
+];
 export declare function useVariation(group: string): {
     /** The currently active variation */
     active: {
