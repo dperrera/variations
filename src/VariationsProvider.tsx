@@ -301,6 +301,7 @@ export function VariationsProvider<TState = unknown>({
       registerVariation,
       variations: localVariations,
       activeTree,
+      disableQueryString,
     }),
     [
       localActiveIds,
@@ -308,6 +309,7 @@ export function VariationsProvider<TState = unknown>({
       registerVariation,
       localVariations,
       activeTree,
+      disableQueryString,
     ]
   );
 

@@ -165,7 +165,8 @@ export function VariationsControls({
   const [activeTab, setActiveTab] = useState<"variations" | "state">(
     "variations"
   );
-  const { activeIds, setActiveId, variations } = useVariations();
+  const { activeIds, setActiveId, variations, disableQueryString } =
+    useVariations();
   const [state, setState] = useVariationsState();
 
   const handleCopyLink = () => {
@@ -393,51 +394,53 @@ export function VariationsControls({
                 </div>
               </div>
               <div className="variations-header-actions">
-                <button
-                  className="variations-header-button"
-                  onClick={handleCopyLink}
-                  title="Copy link to clipboard"
-                  tabIndex={isMinimized ? -1 : 0}
-                >
-                  {showCopied ? (
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M20 6L9 17L4 12"
+                {!disableQueryString && (
+                  <button
+                    className="variations-header-button"
+                    onClick={handleCopyLink}
+                    title="Copy link to clipboard"
+                    tabIndex={isMinimized ? -1 : 0}
+                  >
+                    {showCopied ? (
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M20 6L9 17L4 12"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
                         stroke="currentColor"
                         strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M9 17H7A5 5 0 0 1 7 7h2" />
-                      <path d="M15 7h2a5 5 0 1 1 0 10h-2" />
-                      <line
-                        x1="8"
-                        x2="16"
-                        y1="12"
-                        y2="12"
-                      />
-                    </svg>
-                  )}
-                </button>
+                      >
+                        <path d="M9 17H7A5 5 0 0 1 7 7h2" />
+                        <path d="M15 7h2a5 5 0 1 1 0 10h-2" />
+                        <line
+                          x1="8"
+                          x2="16"
+                          y1="12"
+                          y2="12"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                )}
                 <button
                   className="variations-header-toggle"
                   onClick={() => setIsMinimized(true)}

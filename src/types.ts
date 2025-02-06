@@ -58,6 +58,7 @@ export interface VariationsContextType<
   >;
   /** Tree representation of active variations */
   activeTree: VariationNode<TGroup, TId> | null;
+  disableQueryString: boolean;
 }
 
 export interface VariationsStateContextType<TState = unknown> {
