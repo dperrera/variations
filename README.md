@@ -1,8 +1,4 @@
-# Variations
-
 ![Variations](variations.png)
-
-A React component library that enables rapid prototyping and exploration of UI variations.
 
 ## Installation
 
