@@ -605,6 +605,7 @@ const VARX_STYLES = `
 }
 .varx-body { overflow: auto; }
 .varx-group {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -615,7 +616,16 @@ const VARX_STYLES = `
 .varx-group:hover { background: rgba(0,0,0,0.03); }
 .varx-group--focused {
   background: rgba(0,0,0,0.05);
-  box-shadow: inset 2px 0 0 #111;
+}
+.varx-group--focused::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 5px;
+  bottom: 5px;
+  width: 2px;
+  border-radius: 999px;
+  background: #111;
 }
 .varx-group-title {
   flex: 1;
@@ -713,7 +723,9 @@ const VARX_STYLES = `
   .varx-group:hover { background: rgba(255,255,255,0.05); }
   .varx-group--focused {
     background: rgba(255,255,255,0.08);
-    box-shadow: inset 2px 0 0 #fff;
+  }
+  .varx-group--focused::before {
+    background: #fff;
   }
   .varx-group-title { color: #999; }
   .varx-select {
