@@ -237,12 +237,13 @@ export function VariationsControls({
         return;
       }
 
-      // [ / ] — move focus between groups
-      if (e.key === "[" || e.key === "]") {
+      // ↑ / ↓ — move focus between groups
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        if (e.altKey || e.metaKey || e.ctrlKey) return;
         e.preventDefault();
         setFocusedGroupIndex((prev) => {
           if (orderedGroupIds.length === 0) return 0;
-          const delta = e.key === "]" ? 1 : -1;
+          const delta = e.key === "ArrowDown" ? 1 : -1;
           return (
             (prev + delta + orderedGroupIds.length) % orderedGroupIds.length
           );
@@ -466,8 +467,8 @@ export function VariationsControls({
                   {groupRows}
                   {orderedGroupIds.length > 0 && (
                     <div className="varx-hint">
-                      <kbd className="varx-kbd">[</kbd>
-                      <kbd className="varx-kbd">]</kbd>
+                      <kbd className="varx-kbd varx-kbd--arrow">↑</kbd>
+                      <kbd className="varx-kbd varx-kbd--arrow">↓</kbd>
                       <span className="varx-hint-label">groups</span>
                       <span className="varx-hint-sep">·</span>
                       <kbd className="varx-kbd varx-kbd--arrow">←</kbd>

@@ -35,15 +35,8 @@ export default function HomePage() {
             Try the options.
           </h1>
           <p style={{ fontSize: 18, maxWidth: 42 + "ch", lineHeight: 1.5 }}>
-            Use the floating panel (⌥V) to try options. Use{" "}
-            <kbd style={{ fontFamily: "ui-monospace, monospace", fontSize: 14 }}>
-              [
-            </kbd>
-            /
-            <kbd style={{ fontFamily: "ui-monospace, monospace", fontSize: 14 }}>
-              ]
-            </kbd>{" "}
-            and arrow keys to move between groups and cycle choices.
+            Use the floating panel (⌥V) to try options. Use the arrow
+            keys to move between groups and cycle choices.
           </p>
         </Variation>
         <Variation

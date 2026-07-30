@@ -80,7 +80,7 @@ export default function Hero() {
 | Shortcut | Action |
 | --- | --- |
 | ⌥V | Toggle controls |
-| `[` / `]` | Focus previous / next group |
+| ↑ / ↓ | Focus previous / next group |
 | ← / → | Cycle focused group |
 | 1–9 | Select nth option in focused group (unspoken) |
 | ⌥S / shuffle button | Shuffle all groups |
