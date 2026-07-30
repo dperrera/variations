@@ -463,18 +463,7 @@ export function VariationsControls({
 
             <div className="varx-body">
               {activeTab === "variations" ? (
-                <div className="varx-groups">
-                  {groupRows}
-                  {orderedGroupIds.length > 0 && (
-                    <div className="varx-hint">
-                      <kbd className="varx-kbd varx-kbd--arrow">↑</kbd>
-                      <kbd className="varx-kbd varx-kbd--arrow">↓</kbd>
-                      <kbd className="varx-kbd varx-kbd--arrow">←</kbd>
-                      <kbd className="varx-kbd varx-kbd--arrow">→</kbd>
-                      <span className="varx-hint-label">to navigate</span>
-                    </div>
-                  )}
-                </div>
+                <div className="varx-groups">{groupRows}</div>
               ) : (
                 <div className="varx-state">
                   <StateEditor />
@@ -665,42 +654,7 @@ const VARX_STYLES = `
   background-position: right 8px center;
   background-size: 8px auto;
 }
-.varx-hint {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding: 6px 10px 8px;
-  font-size: 10px;
-  color: #aaa;
-  letter-spacing: 0.02em;
-}
-.varx-hint-label {
-  margin-left: 2px;
-}
-.varx-kbd {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  border-radius: 4px;
-  border: none;
-  background: rgba(0,0,0,0.06);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 10px;
-  font-weight: 600;
-  color: #666;
-  line-height: 1;
-}
-.varx-kbd--arrow {
-  font-size: 14px;
-  font-weight: 400;
-  min-width: 20px;
-  height: 18px;
-  padding: 0 3px;
-}
+
 .varx-empty {
   display: flex;
   flex-direction: column;
@@ -780,10 +734,5 @@ const VARX_STYLES = `
     color: #fff;
   }
   .varx-textarea:focus { background: rgba(255,255,255,0.1); }
-  .varx-hint { color: #666; }
-  .varx-kbd {
-    background: rgba(255,255,255,0.08);
-    color: #ccc;
-  }
 }
 `;
