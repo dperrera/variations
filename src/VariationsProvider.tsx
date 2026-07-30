@@ -27,7 +27,10 @@ export function useVariations<
 >(): VariationsContextType<TGroup, TId> {
   const context = useContext(VariationsContext);
   if (!context) {
-    throw new Error("useVariations must be used within a VariationsProvider");
+    throw new Error(
+      "useVariations must be used within a VariationsProvider.\n" +
+        'Next.js: put VariationsProvider in a Client Component (e.g. app/providers.tsx).'
+    );
   }
   return context as unknown as VariationsContextType<TGroup, TId>;
 }
