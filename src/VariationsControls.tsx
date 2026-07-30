@@ -691,8 +691,8 @@ const VARX_STYLES = `
   height: 18px;
   padding: 0 5px;
   border-radius: 4px;
-  border: 1px solid rgba(0,0,0,0.1);
-  background: rgba(0,0,0,0.04);
+  border: none;
+  background: rgba(0,0,0,0.06);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 10px;
   font-weight: 600;
@@ -700,9 +700,11 @@ const VARX_STYLES = `
   line-height: 1;
 }
 .varx-kbd--arrow {
-  font-size: 13px;
-  font-weight: 500;
-  padding: 0 4px;
+  font-size: 14px;
+  font-weight: 400;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 3px;
 }
 .varx-empty {
   display: flex;
@@ -785,9 +787,8 @@ const VARX_STYLES = `
   .varx-textarea:focus { background: rgba(255,255,255,0.1); }
   .varx-hint { color: #666; }
   .varx-kbd {
-    border-color: rgba(255,255,255,0.14);
-    background: rgba(255,255,255,0.06);
-    color: #bbb;
+    background: rgba(255,255,255,0.08);
+    color: #ccc;
   }
 }
 `;
