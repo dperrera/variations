@@ -80,11 +80,11 @@ export default function Hero() {
 | Shortcut | Action |
 | --- | --- |
 | ⌥V | Toggle controls |
-| 1–9 | Select nth option in focused group |
 | `[` / `]` | Focus previous / next group |
 | ← / → | Cycle focused group |
-| ⌥S | Shuffle all groups |
-| ⌥C | Copy shareable combo URL |
+| 1–9 | Select nth option in focused group (unspoken) |
+| ⌥S / shuffle button | Shuffle all groups |
+| ⌥C / link button | Copy shareable combo URL |
 
 ### Vite / SPA
 

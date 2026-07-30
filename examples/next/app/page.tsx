@@ -35,8 +35,15 @@ export default function HomePage() {
             Try the options.
           </h1>
           <p style={{ fontSize: 18, maxWidth: 42 + "ch", lineHeight: 1.5 }}>
-            Use the floating panel, press ⌥V to toggle it, 1–9 to pick an option,
-            ⌥S to shuffle, and ⌥C to copy a shareable combo.
+            Use the floating panel (⌥V) to try options. Use{" "}
+            <kbd style={{ fontFamily: "ui-monospace, monospace", fontSize: 14 }}>
+              [
+            </kbd>
+            /
+            <kbd style={{ fontFamily: "ui-monospace, monospace", fontSize: 14 }}>
+              ]
+            </kbd>{" "}
+            and arrow keys to move between groups and cycle choices.
           </p>
         </Variation>
         <Variation
