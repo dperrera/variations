@@ -32,7 +32,7 @@
     "dev": "vite",
     "dev:pack": "npm run build && npm pack",
     "typecheck": "tsc --noEmit",
-    "example:next": "npm run build && npm --prefix examples/next install && npm --prefix examples/next run dev"
+    "example:next": "npm run build && npm --prefix examples/next install && npm --prefix examples/next run dev -- -p 3456"
   },
   "keywords": [
     "react",
