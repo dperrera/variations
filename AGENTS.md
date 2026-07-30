@@ -99,8 +99,7 @@ export function Hero() {
 | Shortcut | Action |
 | --- | --- |
 | ⌥V | Toggle controls |
-| ↑ / ↓ | Move focus between groups |
-| ← / → | Cycle focused group |
+| ↑ ↓ ← → | Navigate groups and cycle options |
 | 1–9 | Select nth option in focused group (unspoken) |
 | ⌥S / shuffle button | Shuffle all groups |
 | ⌥C / link button | Copy shareable combo URL |

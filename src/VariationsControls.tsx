@@ -469,11 +469,9 @@ export function VariationsControls({
                     <div className="varx-hint">
                       <kbd className="varx-kbd varx-kbd--arrow">↑</kbd>
                       <kbd className="varx-kbd varx-kbd--arrow">↓</kbd>
-                      <span className="varx-hint-label">groups</span>
-                      <span className="varx-hint-sep">·</span>
                       <kbd className="varx-kbd varx-kbd--arrow">←</kbd>
                       <kbd className="varx-kbd varx-kbd--arrow">→</kbd>
-                      <span className="varx-hint-label">cycle</span>
+                      <span className="varx-hint-label">to navigate</span>
                     </div>
                   )}
                 </div>
@@ -678,11 +676,7 @@ const VARX_STYLES = `
   letter-spacing: 0.02em;
 }
 .varx-hint-label {
-  margin-right: 2px;
-}
-.varx-hint-sep {
-  margin: 0 4px;
-  opacity: 0.5;
+  margin-left: 2px;
 }
 .varx-kbd {
   display: inline-flex;
