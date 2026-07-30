@@ -11,7 +11,6 @@ type InternalVariationProps = VariationProps & {
   group?: string;
   groupLabel?: string;
   parentId?: string;
-  id?: string;
 };
 
 type InternalVariationsProps = VariationsProps & {
@@ -52,48 +51,32 @@ export const Variations: VariationsComponent = Object.assign(
   function Variations({
     isRoot = false,
     label,
+    id,
     children,
-    ...internalProps
+    parentId,
+    group: providedGroup,
   }: VariationsProps & {
     parentId?: string;
     group?: string;
   }) {
-    const { parentId, group: providedGroup } = internalProps;
     const context = useContext(VariationsContext);
     if (!context) {
       throw new Error(
         "Variations component error: No VariationsContext found.\n\n" +
-          "Wrap your tree in <VariationsProvider>.\n\n" +
-          "Next.js App Router example:\n" +
-          '  // app/providers.tsx\n' +
-          '  "use client";\n' +
-          '  import { VariationsProvider, VariationsControls } from "variations";\n' +
-          "  export function Providers({ children }) {\n" +
-          "    return (\n" +
-          "      <VariationsProvider>\n" +
-          "        {children}\n" +
-          '        <VariationsControls position="bottom-center" />\n' +
-          "      </VariationsProvider>\n" +
-          "    );\n" +
-          "  }\n\n" +
-          "  // app/layout.tsx (Server Component — no \"use client\" needed)\n" +
-          '  import { Providers } from "./providers";\n' +
-          "  export default function RootLayout({ children }) {\n" +
-          "    return <html><body><Providers>{children}</Providers></body></html>;\n" +
-          "  }"
+          "Wrap your tree in <VariationsProvider> (or NextVariationsProvider).\n" +
+          "See AGENTS.md for the Next.js App Router setup."
       );
     }
 
     if (isRoot && parentId) {
       throw new Error(
-        "Variations component error: Cannot use isRoot in a nested Variations component.\n\n" +
-          "The isRoot prop can only be used on the top-level Variations component.\n" +
-          "Remove the isRoot prop from any nested Variations components."
+        "Variations component error: Cannot use isRoot in a nested Variations component."
       );
     }
 
     const groupId =
-      providedGroup || (isRoot ? ROOT_GROUP_ID : createSafeId(label));
+      providedGroup ||
+      (isRoot ? ROOT_GROUP_ID : id || createSafeId(label));
 
     const { activeIds, setActiveId, variations } = context;
 
@@ -103,12 +86,14 @@ export const Variations: VariationsComponent = Object.assign(
         Array<[string, { label: string; groupLabel: string }]>
       >();
 
-      Array.from(variations.entries()).forEach(([id, variation]) => {
+      Array.from(variations.entries()).forEach(([variationId, variation]) => {
         const { group, label: variationLabel, groupLabel } = variation;
         if (!groups.has(group)) {
           groups.set(group, []);
         }
-        groups.get(group)!.push([id, { label: variationLabel, groupLabel }]);
+        groups
+          .get(group)!
+          .push([variationId, { label: variationLabel, groupLabel }]);
       });
       return groups;
     }, [variations]);
@@ -118,7 +103,7 @@ export const Variations: VariationsComponent = Object.assign(
         if (!React.isValidElement(child)) return child;
 
         if (isVariationElement(child)) {
-          const variationId = createSafeId(child.props.label);
+          const variationId = child.props.id || createSafeId(child.props.label);
 
           return React.cloneElement<InternalVariationProps>(child, {
             ...child.props,
@@ -131,7 +116,8 @@ export const Variations: VariationsComponent = Object.assign(
 
         if (isVariationsElement(child)) {
           const activeVariationId = activeIds.get(groupId);
-          const nestedGroupId = createSafeId(child.props.label);
+          const nestedGroupId =
+            child.props.id || createSafeId(child.props.label);
 
           return React.cloneElement<InternalVariationsProps>(child, {
             ...child.props,
@@ -148,8 +134,8 @@ export const Variations: VariationsComponent = Object.assign(
       if (!activeIds.has(groupId)) {
         const groupVariations = variationGroups.get(groupId);
         if (groupVariations && groupVariations.length > 0) {
-          const [id] = groupVariations[0];
-          setActiveId(groupId, id);
+          const [firstId] = groupVariations[0];
+          setActiveId(groupId, firstId);
         }
       }
     }, [groupId, variationGroups, activeIds, setActiveId]);

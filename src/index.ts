@@ -8,7 +8,14 @@ export {
   useVariation,
   useVariationsState,
 } from "./VariationsProvider";
+export type { VariationsProviderProps } from "./VariationsProvider";
 export { VariationsControls } from "./VariationsControls";
+export {
+  createSafeId,
+  buildShareUrl,
+  serializeVariationsParam,
+  parseVariationsParam,
+} from "./utils";
 export type {
   VariationsProps,
   VariationProps,
@@ -16,4 +23,5 @@ export type {
   VariationsControlsProps,
   VariationsContextType,
   VariationsStateContextType,
+  UrlSyncAdapter,
 } from "./types";

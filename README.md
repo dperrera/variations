@@ -1,30 +1,32 @@
 ![Variations](variations.png)
 
-Rapid UI prototyping for React — keep multiple design options in the tree and switch between them live. Works with **Next.js App Router**, Vite, and other React apps. See [AGENTS.md](./AGENTS.md) for agent-oriented setup.
+Rapid UI prototyping for React — keep multiple design options in the tree and switch between them live. Works with **Next.js App Router**, Vite, and other React apps. See [AGENTS.md](./AGENTS.md) for agent-oriented setup, or [examples/next](./examples/next) for a runnable App Router demo.
 
 ## Install
 
 ```bash
 npm install variations
 # peerDependencies: react >= 18, react-dom >= 18
+# optional: next >= 13 when using variations/next
 ```
 
 ## Quick start (Next.js App Router)
 
-Keep `app/layout.tsx` as a Server Component. Put the provider in a small client file:
+Keep `app/layout.tsx` as a Server Component. Use `NextVariationsProvider` so query sync goes through the App Router:
 
 ```tsx
 // app/providers.tsx
 "use client";
 
-import { VariationsProvider, VariationsControls } from "variations";
+import { NextVariationsProvider } from "variations/next";
+import { VariationsControls } from "variations";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <VariationsProvider>
+    <NextVariationsProvider>
       {children}
       <VariationsControls position="bottom-center" />
-    </VariationsProvider>
+    </NextVariationsProvider>
   );
 }
 ```
@@ -48,7 +50,7 @@ export default function RootLayout({
 }
 ```
 
-Then author options in any Client Component:
+Author options with **stable ids** (labels can change later without breaking share links):
 
 ```tsx
 "use client";
@@ -57,19 +59,32 @@ import { Variations, Variation } from "variations";
 
 export default function Hero() {
   return (
-    <Variations label="Hero">
-      <Variation label="Centered">
-        <section className="text-center">…</section>
+    <Variations label="Hero" id="hero">
+      <Variation label="Centered" id="centered">
+        <section>…</section>
       </Variation>
-      <Variation label="Split">
-        <section className="grid md:grid-cols-2">…</section>
+      <Variation label="Split" id="split">
+        <section>…</section>
       </Variation>
     </Variations>
   );
 }
 ```
 
-Toggle the controls with **⌥V** (Option/Alt + V), or click the floating icon.
+### Dev-only by default
+
+`enabled` defaults to **on in development** and **off in production**. When off, URL sync pauses and `VariationsControls` renders nothing. Override with `enabled` / `enabled={false}` on the provider or controls.
+
+### Keyboard
+
+| Shortcut | Action |
+| --- | --- |
+| ⌥V | Toggle controls |
+| 1–9 | Select nth option in focused group |
+| `[` / `]` | Focus previous / next group |
+| ← / → | Cycle focused group |
+| ⌥S | Shuffle all groups |
+| ⌥C | Copy shareable combo URL |
 
 ### Vite / SPA
 
@@ -88,52 +103,67 @@ export function App() {
 
 ## URL sharing
 
-Active variations (and optional global state) sync to the query string by default:
+Active variations (and optional global state) sync to the query string when enabled:
 
 ```
-/?var=root.login-page_login-form.option-2&s=base64_encoded_state
+/?var=hero.centered_cta.solid&s=base64_encoded_state
 ```
 
 - `.` separates group from variation id
 - `_` separates groups
 - `s` is base64 JSON for `useVariationsState`
 
-Disable with:
+Copy always works from the panel (⌥C), even when URL sync is disabled. Disable sync with `disableQueryString` or by turning `enabled` off.
+
+Custom sync (any router):
 
 ```tsx
-<VariationsProvider disableQueryString>{children}</VariationsProvider>
+<VariationsProvider
+  urlSync={{
+    getQuery: () => window.location.search,
+    setQuery: (query) => {
+      const url = query ? `${pathname}?${query}` : pathname;
+      window.history.replaceState({}, "", url);
+    },
+  }}
+>
+  {children}
+</VariationsProvider>
 ```
 
 ## Nested variations
 
 ```tsx
-<Variations label="Layout" isRoot>
-  <Variation label="Sidebar">
-    <Variations label="Theme">
-      <Variation label="Light">…</Variation>
-      <Variation label="Dark">…</Variation>
+<Variations label="Layout" id="layout" isRoot>
+  <Variation label="Sidebar" id="sidebar">
+    <Variations label="Theme" id="theme">
+      <Variation label="Light" id="light">…</Variation>
+      <Variation label="Dark" id="dark">…</Variation>
     </Variations>
   </Variation>
-  <Variation label="Top Nav">…</Variation>
+  <Variation label="Top Nav" id="topnav">…</Variation>
 </Variations>
 ```
 
 ## API
 
-### `VariationsProvider`
+### `VariationsProvider` / `NextVariationsProvider`
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `children` | `ReactNode` | — | App tree |
-| `disableQueryString` | `boolean` | `false` | Disable URL sync |
+| `enabled` | `boolean` | `NODE_ENV !== "production"` | Master switch for URL sync + default controls visibility |
+| `disableQueryString` | `boolean` | `false` | Disable URL sync while leaving the rest on |
 | `initialState` | `TState` | — | Seed for `useVariationsState` |
+| `urlSync` | `UrlSyncAdapter` | `history` | Custom query read/write (App Router: use `variations/next`) |
 
 ### `Variations`
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` | `string` | — | Group label in the controls |
-| `isRoot` | `boolean` | `false` | Mark the top-level group (`group` id `root`) |
+| `id` | `string` | slug of `label` (or `"root"`) | Stable group id for URLs / hooks |
+| `isRoot` | `boolean` | `false` | Mark the top-level group |
 | `children` | `ReactNode` | — | `Variation` nodes (and nested `Variations`) |
 
 ### `Variation`
@@ -141,39 +171,25 @@ Disable with:
 | Prop | Type | Description |
 | --- | --- | --- |
 | `label` | `string` | Option label |
+| `id` | `string` | Stable variation id (defaults to slug of `label`) |
 | `children` | `ReactNode` | Rendered when active |
 
 ### `VariationsControls`
 
 | Prop | Type | Default |
 | --- | --- | --- |
-| `position` | `"bottom-center"` \| `"bottom-left"` \| `"bottom-right"` \| `"middle-left"` \| `"middle-right"` \| `"top-center"` \| `"top-left"` \| `"top-right"` | `"bottom-right"` |
+| `position` | `"bottom-center"` \| … | `"bottom-right"` |
 | `minimizedByDefault` | `boolean` | `false` |
+| `enabled` | `boolean` | provider `enabled` |
 
-### Hooks
+Styles are scoped under `.varx-*` to avoid colliding with app CSS.
 
-**`useVariation(group)`** — preferred for one group:
+### Hooks & helpers
 
-```tsx
-const { active, setActive, variations } = useVariation("theme");
-setActive("dark");
-```
-
-**`useVariations()`** — full context (`activeIds`, `setActiveId`, `variations`, `activeTree`).
-
-**`useVariationsState<T>()`** — React `useState`-like global state, URL-synced unless disabled:
-
-```tsx
-const [state, setState] = useVariationsState<AppState>();
-setState((prev) => ({ ...prev, theme: { ...prev.theme, primaryColor: "#000" } }));
-```
-
-## Next.js notes
-
-1. The published package entry starts with `"use client"` so Next treats it as a Client Component module.
-2. Never force the root layout to be a Client Component — use `app/providers.tsx`.
-3. Any file that *calls* hooks from this library (or renders interactive variations without a client parent) still needs `"use client"`.
-4. `react` and `react-dom` are peer dependencies; the app must provide them (avoids duplicate-React failures).
+- `useVariation(group)` — `{ active, setActive, variations }`
+- `useVariations()` — full context
+- `useVariationsState<T>()` — global state tuple
+- `buildShareUrl({ activeIds, state })` — build a combo link programmatically
 
 ## License
 

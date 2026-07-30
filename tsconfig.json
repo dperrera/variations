@@ -14,5 +14,12 @@
     "isolatedModules": true,
     "types": ["react"]
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "src/next.tsx",
+    "src/next-entry.d.ts",
+    "dist",
+    "examples",
+    "node_modules"
+  ]
 }

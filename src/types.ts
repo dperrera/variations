@@ -12,18 +12,38 @@ export type VariationsPosition =
 
 export interface VariationsProps {
   label: string;
+  /** Stable group id. Defaults to a slug of `label` (or `"root"` when `isRoot`). */
+  id?: string;
   children: ReactNode;
   isRoot?: boolean;
 }
 
 export interface VariationProps {
   label: string;
+  /** Stable variation id. Defaults to a slug of `label`. Prefer this for shareable URLs. */
+  id?: string;
   children: ReactNode;
 }
 
 export interface VariationsControlsProps {
   position?: VariationsPosition;
   minimizedByDefault?: boolean;
+  /**
+   * Force controls on/off. Defaults to the provider `enabled` flag
+   * (on in development, off in production).
+   */
+  enabled?: boolean;
+}
+
+/**
+ * Pluggable URL sync (e.g. Next.js App Router via `variations/next`).
+ * When omitted, the provider uses `history.replaceState` + `popstate`.
+ */
+export interface UrlSyncAdapter {
+  /** Current query string (with or without `?`) or URLSearchParams */
+  getQuery: () => string | URLSearchParams;
+  /** Replace the query string (no leading `?`). Empty string clears it. */
+  setQuery: (query: string) => void;
 }
 
 export interface VariationNode<
@@ -39,11 +59,8 @@ export interface VariationsContextType<
   TGroup extends string = string,
   TId extends string = string
 > {
-  /** Map of group IDs to their active variation IDs */
   activeIds: Map<TGroup, TId>;
-  /** Set the active variation ID for a group */
   setActiveId: (group: TGroup, variationId: TId) => void;
-  /** Internal method to register a variation */
   registerVariation: (
     group: TGroup,
     id: TId,
@@ -51,19 +68,17 @@ export interface VariationsContextType<
     groupLabel: string,
     parentId?: TId
   ) => void;
-  /** Map of variation IDs to their metadata */
   variations: Map<
     TId,
     { group: TGroup; label: string; groupLabel: string; parentId?: TId }
   >;
-  /** Tree representation of active variations */
   activeTree: VariationNode<TGroup, TId> | null;
   disableQueryString: boolean;
+  /** False in production by default — controls should hide and URL sync pauses. */
+  enabled: boolean;
 }
 
 export interface VariationsStateContextType<TState = unknown> {
-  /** Get the current state */
   state: TState;
-  /** Update the state */
-  setState: (updater: (prev: TState) => TState) => void;
+  setState: (valueOrUpdater: TState | ((prev: TState) => TState)) => void;
 }

@@ -2,3 +2,6 @@ node_modules
 /dist
 *.tgz
 .DS_Store
+examples/next/node_modules
+examples/next/.next
+examples/next/next-env.d.ts

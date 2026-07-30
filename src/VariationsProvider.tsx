@@ -5,13 +5,23 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import type {
+  UrlSyncAdapter,
   VariationNode,
   VariationsContextType,
   VariationsStateContextType,
 } from "./types";
+import {
+  decodeStateParam,
+  encodeStateParam,
+  isDevEnvironment,
+  parseVariationsParam,
+  serializeVariationsParam,
+  toSearchParams,
+} from "./utils";
 
 export const VariationsContext = createContext<VariationsContextType<
   string,
@@ -29,7 +39,7 @@ export function useVariations<
   if (!context) {
     throw new Error(
       "useVariations must be used within a VariationsProvider.\n" +
-        'Next.js: put VariationsProvider in a Client Component (e.g. app/providers.tsx).'
+        'Next.js: put VariationsProvider (or NextVariationsProvider) in a Client Component.'
     );
   }
   return context as unknown as VariationsContextType<TGroup, TId>;
@@ -55,7 +65,6 @@ export function useVariation(group: string) {
   const { activeIds, setActiveId, variations } = useVariations();
   const activeId = activeIds.get(group);
 
-  // Get all variations for this group
   const groupVariations = useMemo(() => {
     return Array.from(variations.entries())
       .filter(([, variation]) => variation.group === group)
@@ -65,7 +74,6 @@ export function useVariation(group: string) {
       }));
   }, [variations, group]);
 
-  // Get the currently active variation
   const active = useMemo(() => {
     if (!activeId) return null;
     const variation = variations.get(activeId);
@@ -73,28 +81,52 @@ export function useVariation(group: string) {
   }, [activeId, variations]);
 
   return {
-    /** The currently active variation */
     active,
-    /** Set the active variation by ID */
     setActive: (id: string) => setActiveId(group, id),
-    /** All available variations for this group */
     variations: groupVariations,
   };
 }
 
 export interface VariationsProviderProps<TState = unknown> {
   children: React.ReactNode;
-  /** Disables the URL query string functionality when true */
+  /** Disables URL query string sync when true */
   disableQueryString?: boolean;
+  /**
+   * Master switch for URL sync and default controls visibility.
+   * Defaults to `true` in development and `false` in production.
+   */
+  enabled?: boolean;
   /** Initial state for the global state context */
   initialState?: TState;
+  /**
+   * Custom URL sync adapter. Use `NextVariationsProvider` from `variations/next`
+   * for App Router, or pass your own adapter.
+   */
+  urlSync?: UrlSyncAdapter;
+}
+
+function readFromQuery<TState>(
+  query: string | URLSearchParams,
+  setActiveIds: (map: Map<string, string>) => void,
+  setState: (state: TState) => void
+) {
+  const params = toSearchParams(query);
+  setActiveIds(parseVariationsParam(params.get("var")));
+  const decoded = decodeStateParam<TState>(params.get("s"));
+  if (decoded !== null) setState(decoded);
 }
 
 export function VariationsProvider<TState = unknown>({
   children,
   disableQueryString = false,
+  enabled,
   initialState,
+  urlSync,
 }: VariationsProviderProps<TState>) {
+  const isEnabled = enabled ?? isDevEnvironment();
+  const syncUrl = isEnabled && !disableQueryString;
+  const writingRef = useRef(false);
+
   const [localActiveIds, setLocalActiveIds] = useState<Map<string, string>>(
     new Map()
   );
@@ -104,110 +136,71 @@ export function VariationsProvider<TState = unknown>({
       { parentId?: string; group: string; label: string; groupLabel: string }
     >
   >(new Map());
-
-  // Global state management
   const [globalState, setGlobalState] = useState<TState>(
     () => initialState as TState
   );
 
-  // Initialize from URL if present
-  useEffect(() => {
-    if (disableQueryString || typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
+  // Snapshot of external query for adapter-driven re-reads (e.g. Next.js)
+  const externalQuery = syncUrl && urlSync ? String(urlSync.getQuery()) : null;
 
-    // Parse variations first
-    const variations = params.get("var");
-    if (variations) {
-      try {
-        const pairs = variations.split("_").map((pair) => {
-          const [group, id] = pair.split(".");
-          if (!group || !id) throw new Error("Invalid format");
-          return [group, id] as [string, string];
-        });
-        setLocalActiveIds(new Map(pairs));
-      } catch (e) {
-        setLocalActiveIds(new Map());
-      }
+  // Initialize / re-sync from URL
+  useEffect(() => {
+    if (!syncUrl || typeof window === "undefined") return;
+    if (writingRef.current) return;
+
+    if (urlSync) {
+      readFromQuery(urlSync.getQuery(), setLocalActiveIds, setGlobalState);
+      return;
     }
 
-    // Parse state
-    const stateParam = params.get("s");
-    if (stateParam) {
-      try {
-        const decodedState = JSON.parse(atob(stateParam)) as TState;
-        setGlobalState(decodedState);
-      } catch (e) {
-        // Invalid state format, keep initial state
-      }
-    }
-  }, [disableQueryString]);
+    readFromQuery(window.location.search, setLocalActiveIds, setGlobalState);
+  }, [syncUrl, urlSync, externalQuery]);
 
-  // Update URL when variations or state change
+  // Write URL when variations or state change
   useEffect(() => {
-    if (disableQueryString || typeof window === "undefined") return;
+    if (!syncUrl || typeof window === "undefined") return;
+
     const params = new URLSearchParams();
+    const varValue = serializeVariationsParam(localActiveIds);
+    if (varValue) params.set("var", varValue);
 
-    // Update variations param first
-    const variations = Array.from(localActiveIds.entries());
-    if (variations.length > 0) {
-      const urlValue = variations
-        .map(([group, id]) => `${group}.${id}`)
-        .join("_");
-      params.set("var", urlValue);
-    }
-
-    // Update state param second
     if (globalState !== undefined) {
-      const stateStr = btoa(JSON.stringify(globalState));
-      params.set("s", stateStr);
+      const encoded = encodeStateParam(globalState);
+      if (encoded) params.set("s", encoded);
     }
 
-    const newSearch = params.toString();
-    const newUrl = newSearch
-      ? `${window.location.pathname}?${newSearch}`
+    const nextQuery = params.toString();
+
+    if (urlSync) {
+      const current = toSearchParams(urlSync.getQuery()).toString();
+      if (current === nextQuery) return;
+      writingRef.current = true;
+      urlSync.setQuery(nextQuery);
+      queueMicrotask(() => {
+        writingRef.current = false;
+      });
+      return;
+    }
+
+    const current = new URLSearchParams(window.location.search).toString();
+    if (current === nextQuery) return;
+
+    const newUrl = nextQuery
+      ? `${window.location.pathname}?${nextQuery}`
       : window.location.pathname;
     window.history.replaceState({}, "", newUrl);
-  }, [localActiveIds, globalState, disableQueryString]);
+  }, [localActiveIds, globalState, syncUrl, urlSync]);
 
-  // Listen for URL changes
+  // Browser back/forward (default adapter only)
   useEffect(() => {
-    if (disableQueryString || typeof window === "undefined") return;
+    if (!syncUrl || urlSync || typeof window === "undefined") return;
     const handlePopState = () => {
-      const params = new URLSearchParams(window.location.search);
-
-      // Handle variations first
-      const variations = params.get("var");
-      if (variations) {
-        try {
-          const pairs = variations.split("_").map((pair) => {
-            const [group, id] = pair.split(".");
-            if (!group || !id) throw new Error("Invalid format");
-            return [group, id] as [string, string];
-          });
-          setLocalActiveIds(new Map(pairs));
-        } catch (e) {
-          setLocalActiveIds(new Map());
-        }
-      } else {
-        setLocalActiveIds(new Map());
-      }
-
-      // Handle state second
-      const stateParam = params.get("s");
-      if (stateParam) {
-        try {
-          const decodedState = JSON.parse(atob(stateParam)) as TState;
-          setGlobalState(decodedState);
-        } catch (e) {
-          // Invalid state format, keep current state
-        }
-      }
+      readFromQuery(window.location.search, setLocalActiveIds, setGlobalState);
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, [disableQueryString]);
+  }, [syncUrl, urlSync]);
 
-  // Build the active variations tree
   const activeTree = useMemo(() => {
     const rootId = localActiveIds.get("root");
     if (!rootId) return null;
@@ -219,7 +212,6 @@ export function VariationsProvider<TState = unknown>({
         children: new Map(),
       };
 
-      // Find all variations that have this node's id as their parent
       Array.from(localVariations.entries()).forEach(([, variation]) => {
         if (variation.parentId === id) {
           const activeId = localActiveIds.get(variation.group);
@@ -235,8 +227,7 @@ export function VariationsProvider<TState = unknown>({
       return node;
     };
 
-    const root = buildNode(rootId, "root");
-    return root;
+    return buildNode(rootId, "root");
   }, [localActiveIds, localVariations]);
 
   const setActiveId = useCallback(
@@ -244,13 +235,11 @@ export function VariationsProvider<TState = unknown>({
       setLocalActiveIds((prev) => {
         const next = new Map(prev);
         next.set(group, id);
-        // Clear all child variations when changing layout
         if (group === "root") {
           Array.from(prev.keys()).forEach((key) => {
             if (key !== "root") next.delete(key);
           });
         } else {
-          // Clear child variations of the changed group
           const variation = Array.from(localVariations.entries()).find(
             ([id_]) => id_ === id
           );
@@ -305,6 +294,7 @@ export function VariationsProvider<TState = unknown>({
       variations: localVariations,
       activeTree,
       disableQueryString,
+      enabled: isEnabled,
     }),
     [
       localActiveIds,
@@ -313,6 +303,7 @@ export function VariationsProvider<TState = unknown>({
       localVariations,
       activeTree,
       disableQueryString,
+      isEnabled,
     ]
   );
 
