@@ -4,6 +4,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -105,7 +106,7 @@ export interface VariationsProviderProps<TState = unknown> {
   urlSync?: UrlSyncAdapter;
 }
 
-function readFromQuery<TState>(
+function applyQueryToState<TState>(
   query: string | URLSearchParams,
   setActiveIds: (map: Map<string, string>) => void,
   setState: (state: TState) => void
@@ -126,6 +127,9 @@ export function VariationsProvider<TState = unknown>({
   const isEnabled = enabled ?? isDevEnvironment();
   const syncUrl = isEnabled && !disableQueryString;
   const writingRef = useRef(false);
+  // Gate URL writes until we've hydrated from the current query once.
+  // Prevents default variation selection from overwriting share links on load.
+  const [urlReady, setUrlReady] = useState(!syncUrl);
 
   const [localActiveIds, setLocalActiveIds] = useState<Map<string, string>>(
     new Map()
@@ -140,25 +144,24 @@ export function VariationsProvider<TState = unknown>({
     () => initialState as TState
   );
 
-  // Snapshot of external query for adapter-driven re-reads (e.g. Next.js)
   const externalQuery = syncUrl && urlSync ? String(urlSync.getQuery()) : null;
 
-  // Initialize / re-sync from URL
-  useEffect(() => {
-    if (!syncUrl || typeof window === "undefined") return;
-    if (writingRef.current) return;
-
-    if (urlSync) {
-      readFromQuery(urlSync.getQuery(), setLocalActiveIds, setGlobalState);
+  // Hydrate from URL before paint / before child useEffects that set defaults.
+  useLayoutEffect(() => {
+    if (!syncUrl || typeof window === "undefined") {
+      setUrlReady(true);
       return;
     }
+    if (writingRef.current) return;
 
-    readFromQuery(window.location.search, setLocalActiveIds, setGlobalState);
+    const query = urlSync ? urlSync.getQuery() : window.location.search;
+    applyQueryToState(query, setLocalActiveIds, setGlobalState);
+    setUrlReady(true);
   }, [syncUrl, urlSync, externalQuery]);
 
-  // Write URL when variations or state change
+  // Write URL when variations or state change — only after hydration.
   useEffect(() => {
-    if (!syncUrl || typeof window === "undefined") return;
+    if (!syncUrl || !urlReady || typeof window === "undefined") return;
 
     const params = new URLSearchParams();
     const varValue = serializeVariationsParam(localActiveIds);
@@ -189,13 +192,17 @@ export function VariationsProvider<TState = unknown>({
       ? `${window.location.pathname}?${nextQuery}`
       : window.location.pathname;
     window.history.replaceState({}, "", newUrl);
-  }, [localActiveIds, globalState, syncUrl, urlSync]);
+  }, [localActiveIds, globalState, syncUrl, urlSync, urlReady]);
 
   // Browser back/forward (default adapter only)
   useEffect(() => {
     if (!syncUrl || urlSync || typeof window === "undefined") return;
     const handlePopState = () => {
-      readFromQuery(window.location.search, setLocalActiveIds, setGlobalState);
+      applyQueryToState(
+        window.location.search,
+        setLocalActiveIds,
+        setGlobalState
+      );
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);

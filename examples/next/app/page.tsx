@@ -26,7 +26,6 @@ export default function HomePage() {
       <Variations
         label="Hero"
         id="hero"
-        isRoot
       >
         <Variation
           label="Editorial"
