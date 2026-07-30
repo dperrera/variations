@@ -519,24 +519,24 @@ const VARX_STYLES = `
   box-sizing: border-box;
 }
 .varx-panel {
-  width: 300px;
+  width: 280px;
   max-height: calc(100vh - 32px);
   overflow: auto;
   background: #fff;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
-  padding: 4px;
+  padding: 2px;
 }
 .varx-panel--minimized {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  border-radius: 18px;
+  border-radius: 16px;
   overflow: hidden;
 }
 .varx-fab {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: none;
   background: none;
   color: #666;
@@ -549,7 +549,7 @@ const VARX_STYLES = `
   outline: none;
   background: #111;
   color: #fff;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 .varx-header {
   position: sticky;
@@ -557,7 +557,7 @@ const VARX_STYLES = `
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 6px 6px 12px;
+  padding-left: 10px;
   background: rgba(255,255,255,0.85);
   backdrop-filter: blur(4px);
   z-index: 1;
@@ -565,17 +565,17 @@ const VARX_STYLES = `
 .varx-header-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: #999;
 }
 .varx-header-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 .varx-tabs {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 .varx-tab {
   text-transform: uppercase;
@@ -586,7 +586,7 @@ const VARX_STYLES = `
   font-size: 10px;
   font-weight: 500;
   border-bottom: 1px solid transparent;
-  padding: 8px 0;
+  padding: 6px 0;
 }
 .varx-tab:hover { color: #000; }
 .varx-tab:focus { outline: none; border-bottom-color: currentColor; }
@@ -596,17 +596,18 @@ const VARX_STYLES = `
   border: none;
   color: #999;
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 2px;
   padding: 0;
 }
 .varx-close {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
+  border-top-right-radius: 8px;
 }
 .varx-icon-btn:hover, .varx-close:hover { color: #111; }
 .varx-icon-btn:focus, .varx-close:focus {
@@ -615,20 +616,13 @@ const VARX_STYLES = `
   color: #fff;
 }
 .varx-body { overflow: auto; }
-.varx-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 4px 0 2px;
-}
 .varx-group {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 8px 8px 12px;
-  gap: 12px;
+  padding: 0 0 0 10px;
+  gap: 4px;
   overflow: hidden;
-  border-radius: 8px;
 }
 .varx-group:hover { background: rgba(0,0,0,0.03); }
 .varx-group--focused {
@@ -637,7 +631,7 @@ const VARX_STYLES = `
 }
 .varx-group-title {
   flex: 1;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: #888;
   text-overflow: ellipsis;
@@ -645,23 +639,23 @@ const VARX_STYLES = `
   white-space: nowrap;
 }
 .varx-select {
-  width: 112px;
-  flex: 0 0 112px;
-  padding: 6px 26px 6px 10px;
-  font-size: 12px;
+  width: 100px;
+  flex: 0 0 100px;
+  padding: 4px 24px 4px 8px;
+  font-size: 11px;
   color: #111;
   background: transparent;
   cursor: pointer;
   outline: none;
   appearance: none;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L4 6L7 3' stroke='%23999999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 10px center;
+  background-position: right 8px center;
   background-size: 8px auto;
 }
 .varx-select:focus {
@@ -669,15 +663,15 @@ const VARX_STYLES = `
   color: #fff;
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L4 6L7 3' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 10px center;
+  background-position: right 8px center;
   background-size: 8px auto;
 }
 .varx-hint {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 5px;
-  padding: 10px 12px 12px;
+  gap: 4px;
+  padding: 6px 10px 8px;
   font-size: 10px;
   color: #aaa;
   letter-spacing: 0.02em;
@@ -686,22 +680,22 @@ const VARX_STYLES = `
   margin-right: 2px;
 }
 .varx-hint-sep {
-  margin: 0 6px;
+  margin: 0 4px;
   opacity: 0.5;
 }
 .varx-kbd {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  border-radius: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 3px;
   border: 1px solid rgba(0,0,0,0.12);
   background: rgba(0,0,0,0.04);
   box-shadow: 0 1px 0 rgba(0,0,0,0.06);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   color: #666;
   line-height: 1;
@@ -711,9 +705,9 @@ const VARX_STYLES = `
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 28px 20px;
+  padding: 20px 16px;
   text-align: center;
-  gap: 6px;
+  gap: 4px;
 }
 .varx-empty-title {
   font-size: 13px;
@@ -721,27 +715,27 @@ const VARX_STYLES = `
   color: #666;
 }
 .varx-empty-text {
-  font-size: 12px;
+  font-size: 11px;
   color: #999;
 }
 .varx-code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 11px;
-  padding: 2px 5px;
+  padding: 1px 4px;
   background: rgba(0,0,0,0.03);
   border-radius: 4px;
 }
-.varx-state { padding: 10px; }
+.varx-state { padding: 8px; }
 .varx-textarea {
   width: 100%;
   max-height: 80vh;
   min-height: 200px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 11px;
-  line-height: 1.45;
-  padding: 10px;
+  line-height: 1.4;
+  padding: 8px;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   background: rgba(0,0,0,0.03);
   color: #111;
   resize: vertical;
