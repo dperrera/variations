@@ -1,3 +1,5 @@
+"use client";
+
 export { Variation } from "./Variation";
 export { Variations } from "./Variations";
 export {

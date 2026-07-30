@@ -4,13 +4,15 @@
     "declaration": true,
     "declarationDir": "dist",
     "strict": true,
-    "jsx": "preserve",
-    "moduleResolution": "node",
-    "target": "ESNext",
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "target": "ES2020",
     "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["react", "styled-jsx"]
+    "isolatedModules": true,
+    "types": ["react"]
   },
   "include": ["src"]
 }

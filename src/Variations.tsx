@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext, useEffect, useMemo } from "react";
-import { Variation } from "./Variation";
 import { VariationsContext } from "./VariationsProvider";
+import { getVariationsType, VARIATIONS_TYPE } from "./markers";
 import type { VariationProps, VariationsProps } from "./types";
 import { createSafeId } from "./utils";
 
@@ -24,76 +24,100 @@ function isVariationElement(
 ): child is React.ReactElement<VariationProps> {
   return (
     React.isValidElement<VariationProps>(child) &&
-    child.type === Variation &&
+    getVariationsType(child.type) === "Variation" &&
     typeof child.props.label === "string"
   );
 }
 
-export function Variations({
-  isRoot = false,
-  label,
-  children,
-  ...internalProps
-}: VariationsProps & {
-  parentId?: string;
-  group?: string;
-}) {
-  const { parentId, group: providedGroup } = internalProps;
-  const context = useContext(VariationsContext);
-  if (!context) {
-    throw new Error(
-      "Variations component error: No VariationsContext found.\n\n" +
-        "This usually means one of two things:\n" +
-        '1. You forgot to add "use client" at the top of your page component\n' +
-        "2. The Variations component is not wrapped in a VariationsProvider\n\n" +
-        "To fix this:\n" +
-        '1. Add "use client" as the first line of your page component:\n' +
-        '   "use client";\n' +
-        "   export default function Page() { ... }\n\n" +
-        "2. Or check that VariationsProvider exists in your app layout"
-    );
+function isVariationsElement(
+  child: React.ReactNode
+): child is React.ReactElement<VariationsProps> {
+  return (
+    React.isValidElement<VariationsProps>(child) &&
+    getVariationsType(child.type) === "Variations" &&
+    typeof child.props.label === "string"
+  );
+}
+
+type VariationsComponent = ((
+  props: VariationsProps & {
+    parentId?: string;
+    group?: string;
   }
+) => React.ReactNode) & {
+  __variationsType: typeof VARIATIONS_TYPE;
+};
 
-  // Validate that isRoot is not used in nested variations
-  if (isRoot && parentId) {
-    throw new Error(
-      "Variations component error: Cannot use isRoot in a nested Variations component.\n\n" +
-        "The isRoot prop can only be used on the top-level Variations component.\n" +
-        "Remove the isRoot prop from any nested Variations components."
-    );
-  }
+export const Variations: VariationsComponent = Object.assign(
+  function Variations({
+    isRoot = false,
+    label,
+    children,
+    ...internalProps
+  }: VariationsProps & {
+    parentId?: string;
+    group?: string;
+  }) {
+    const { parentId, group: providedGroup } = internalProps;
+    const context = useContext(VariationsContext);
+    if (!context) {
+      throw new Error(
+        "Variations component error: No VariationsContext found.\n\n" +
+          "Wrap your tree in <VariationsProvider>.\n\n" +
+          "Next.js App Router example:\n" +
+          '  // app/providers.tsx\n' +
+          '  "use client";\n' +
+          '  import { VariationsProvider, VariationsControls } from "variations";\n' +
+          "  export function Providers({ children }) {\n" +
+          "    return (\n" +
+          "      <VariationsProvider>\n" +
+          "        {children}\n" +
+          '        <VariationsControls position="bottom-center" />\n' +
+          "      </VariationsProvider>\n" +
+          "    );\n" +
+          "  }\n\n" +
+          "  // app/layout.tsx (Server Component — no \"use client\" needed)\n" +
+          '  import { Providers } from "./providers";\n' +
+          "  export default function RootLayout({ children }) {\n" +
+          "    return <html><body><Providers>{children}</Providers></body></html>;\n" +
+          "  }"
+      );
+    }
 
-  const groupId =
-    providedGroup || (isRoot ? ROOT_GROUP_ID : createSafeId(label));
+    if (isRoot && parentId) {
+      throw new Error(
+        "Variations component error: Cannot use isRoot in a nested Variations component.\n\n" +
+          "The isRoot prop can only be used on the top-level Variations component.\n" +
+          "Remove the isRoot prop from any nested Variations components."
+      );
+    }
 
-  const { activeIds, setActiveId, variations } = context;
+    const groupId =
+      providedGroup || (isRoot ? ROOT_GROUP_ID : createSafeId(label));
 
-  // Group variations by group
-  const variationGroups = useMemo(() => {
-    const groups = new Map<
-      string,
-      Array<[string, { label: string; groupLabel: string }]>
-    >();
+    const { activeIds, setActiveId, variations } = context;
 
-    Array.from(variations.entries()).forEach(([id, variation]) => {
-      const { group, label: variationLabel, groupLabel } = variation;
-      if (!groups.has(group)) {
-        groups.set(group, []);
-      }
-      groups.get(group)!.push([id, { label: variationLabel, groupLabel }]);
-    });
-    return groups;
-  }, [variations]);
+    const variationGroups = useMemo(() => {
+      const groups = new Map<
+        string,
+        Array<[string, { label: string; groupLabel: string }]>
+      >();
 
-  // Process children to inject group prop
-  const processedChildren = useMemo(() => {
-    return React.Children.map(children, (child) => {
-      if (React.isValidElement(child)) {
-        if (child.type === Variation) {
-          if (!isVariationElement(child)) {
-            throw new Error("Invalid Variation component");
-          }
+      Array.from(variations.entries()).forEach(([id, variation]) => {
+        const { group, label: variationLabel, groupLabel } = variation;
+        if (!groups.has(group)) {
+          groups.set(group, []);
+        }
+        groups.get(group)!.push([id, { label: variationLabel, groupLabel }]);
+      });
+      return groups;
+    }, [variations]);
 
+    const processedChildren = useMemo(() => {
+      return React.Children.map(children, (child) => {
+        if (!React.isValidElement(child)) return child;
+
+        if (isVariationElement(child)) {
           const variationId = createSafeId(child.props.label);
 
           return React.cloneElement<InternalVariationProps>(child, {
@@ -103,32 +127,34 @@ export function Variations({
             id: variationId,
             parentId,
           });
-        } else if (child.type === Variations) {
-          const variationsChild = child as React.ReactElement<VariationsProps>;
-          const activeVariationId = activeIds.get(groupId);
-          const nestedGroupId = createSafeId(variationsChild.props.label);
+        }
 
-          return React.cloneElement<InternalVariationsProps>(variationsChild, {
-            ...variationsChild.props,
+        if (isVariationsElement(child)) {
+          const activeVariationId = activeIds.get(groupId);
+          const nestedGroupId = createSafeId(child.props.label);
+
+          return React.cloneElement<InternalVariationsProps>(child, {
+            ...child.props,
             parentId: activeVariationId,
             group: nestedGroupId,
           });
         }
-      }
-      return child;
-    });
-  }, [children, groupId, label, activeIds, parentId]);
 
-  // Set initial active IDs if needed
-  useEffect(() => {
-    if (!activeIds.has(groupId)) {
-      const variations = variationGroups.get(groupId);
-      if (variations && variations.length > 0) {
-        const [id] = variations[0];
-        setActiveId(groupId, id);
-      }
-    }
-  }, [groupId, variationGroups, activeIds, setActiveId]);
+        return child;
+      });
+    }, [children, groupId, label, activeIds, parentId]);
 
-  return <>{processedChildren}</>;
-}
+    useEffect(() => {
+      if (!activeIds.has(groupId)) {
+        const groupVariations = variationGroups.get(groupId);
+        if (groupVariations && groupVariations.length > 0) {
+          const [id] = groupVariations[0];
+          setActiveId(groupId, id);
+        }
+      }
+    }, [groupId, variationGroups, activeIds, setActiveId]);
+
+    return <>{processedChildren}</>;
+  },
+  { __variationsType: VARIATIONS_TYPE }
+);
