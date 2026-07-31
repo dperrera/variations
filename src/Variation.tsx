@@ -5,13 +5,14 @@ import { createSafeId } from "./utils";
 import { VARIATION_TYPE } from "./markers";
 import type { VariationProps } from "./types";
 
+type InternalProps = {
+  group?: string;
+  groupLabel?: string;
+  parentId?: string;
+};
+
 type VariationComponent = ((
-  props: VariationProps & {
-    group?: string;
-    groupLabel?: string;
-    parentId?: string;
-    id?: string;
-  }
+  props: VariationProps & InternalProps
 ) => React.ReactNode) & {
   __variationsType: typeof VARIATION_TYPE;
 };
@@ -19,15 +20,12 @@ type VariationComponent = ((
 export const Variation: VariationComponent = Object.assign(
   function Variation({
     label,
+    id,
     children,
-    ...internalProps
-  }: VariationProps & {
-    group?: string;
-    groupLabel?: string;
-    parentId?: string;
-    id?: string;
-  }) {
-    const { group = "", id, groupLabel, parentId } = internalProps;
+    group = "",
+    groupLabel,
+    parentId,
+  }: VariationProps & InternalProps) {
     const generatedId = useMemo(() => id || createSafeId(label), [id, label]);
     const { activeIds, registerVariation } = useVariations();
     const isActive = activeIds.get(group) === generatedId;
@@ -36,19 +34,8 @@ export const Variation: VariationComponent = Object.assign(
       if (!group) {
         console.error(
           `Variation Component Error: No group provided for variation "${label}"\n\n` +
-            "This usually means one of two things:\n" +
-            "1. The Variation is not wrapped in a <Variations> component\n" +
-            "2. VariationsProvider is missing from your app tree\n\n" +
-            "To fix this, wrap Variation in Variations inside a VariationsProvider:\n" +
-            `   <VariationsProvider>\n` +
-            `     <Variations label="My Variations">\n` +
-            `       <Variation label="${label}">\n` +
-            "         {children}\n" +
-            "       </Variation>\n" +
-            "     </Variations>\n" +
-            "   </VariationsProvider>\n\n" +
-            "In Next.js App Router, put VariationsProvider in a Client Component\n" +
-            '(e.g. app/providers.tsx with "use client") and wrap your layout children.'
+            "Wrap <Variation> in <Variations> inside a <VariationsProvider>.\n" +
+            "Next.js: use app/providers.tsx (or NextVariationsProvider from \"variations/next\")."
         );
         return;
       }

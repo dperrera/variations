@@ -7,24 +7,30 @@
 ```bash
 npm install variations
 # peer: react >= 18, react-dom >= 18
+# optional peer: next >= 13 (only if using variations/next)
 ```
 
-## Next.js App Router (required pattern)
+## Defaults that matter
 
-Do **not** add `"use client"` to `app/layout.tsx`. Keep the layout a Server Component and isolate the provider:
+- **Dev-only by default.** `VariationsProvider` sets `enabled` to `true` in development and `false` in production. When disabled, URL sync pauses and `VariationsControls` renders nothing. Pass `enabled` to override.
+- **Stable ids.** Prefer `id` on `<Variations>` / `<Variation>` so share URLs survive label renames.
+- **Controls CSS is scoped** under `.varx-*` class names.
+
+## Next.js App Router (preferred)
 
 ```tsx
 // app/providers.tsx
 "use client";
 
-import { VariationsProvider, VariationsControls } from "variations";
+import { NextVariationsProvider } from "variations/next";
+import { VariationsControls } from "variations";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <VariationsProvider>
+    <NextVariationsProvider>
       {children}
       <VariationsControls position="bottom-center" />
-    </VariationsProvider>
+    </NextVariationsProvider>
   );
 }
 ```
@@ -48,11 +54,11 @@ export default function RootLayout({
 }
 ```
 
-The published package entry already includes `"use client"`, so importing `variations` into a Client Component boundary is enough. Pages that only render `<Variations>` / `<Variation>` still need `"use client"` (or must live under a client parent) because those components use hooks.
+`NextVariationsProvider` syncs `?var=` / `?s=` through `next/navigation` (no `history.replaceState` fights).
 
-## Vite / CRA / other SPA
+Local demo: `examples/next` (`npm run example:next` from repo root).
 
-Wrap the app root once:
+## Vite / SPA
 
 ```tsx
 import { VariationsProvider, VariationsControls } from "variations";
@@ -67,7 +73,7 @@ export function App() {
 }
 ```
 
-## Authoring variations (do this)
+## Authoring variations
 
 ```tsx
 "use client";
@@ -76,11 +82,11 @@ import { Variations, Variation } from "variations";
 
 export function Hero() {
   return (
-    <Variations label="Hero">
-      <Variation label="Centered">
+    <Variations label="Hero" id="hero">
+      <Variation label="Centered" id="centered">
         {/* option A */}
       </Variation>
-      <Variation label="Split">
+      <Variation label="Split" id="split">
         {/* option B */}
       </Variation>
     </Variations>
@@ -88,36 +94,34 @@ export function Hero() {
 }
 ```
 
-Rules of thumb for agents:
+### Keyboard (when controls are open)
 
-1. One `<Variations label="...">` group per decision (layout, theme, CTA copy, density).
-2. Put each concrete option in its own `<Variation label="...">`.
+| Shortcut | Action |
+| --- | --- |
+| ⌥V | Toggle controls |
+| ↑ ↓ ← → | Navigate groups and cycle options |
+| 1–9 | Select nth option in focused group (unspoken) |
+| ⌥S / shuffle button | Shuffle all groups |
+| ⌥C / link button | Copy shareable combo URL |
+
+## Rules of thumb for agents
+
+1. One `<Variations id="…" label="…">` group per decision.
+2. Put each concrete option in `<Variation id="…" label="…">`.
 3. Nest groups when options only make sense inside another choice.
-4. Keep the floating controls mounted in development so humans can flip options without a rebuild.
-5. Share a specific combo via the URL (`?var=group.id_group.id`). Disable with `disableQueryString` if needed.
-6. Do not put `"use client"` on the Next.js root layout; use `app/providers.tsx`.
-
-## Programmatic control
-
-```tsx
-const { active, setActive, variations } = useVariation("hero");
-setActive("split");
-```
-
-Global scratch state (optional, URL-synced by default):
-
-```tsx
-const [state, setState] = useVariationsState<MyState>();
-```
+4. Keep controls mounted in development; production stays off unless `enabled`.
+5. Do not put `"use client"` on the Next.js root layout — use `app/providers.tsx`.
+6. Use `variations/next` on App Router projects.
 
 ## Common failures
 
 | Symptom | Fix |
 | --- | --- |
 | `useVariations must be used within a VariationsProvider` | Missing provider — add `Providers` as above |
-| Controls empty / "No Variations Found" | No `<Variations>` mounted yet, or page is a Server Component without a client boundary |
-| Duplicate React / hook errors | Ensure `react` / `react-dom` are peer deps from the app, not nested copies |
-| Layout forced to client | Move provider out of `layout.tsx` into `providers.tsx` |
+| Controls missing in `next dev` | Provider `enabled` forced off, or controls `enabled={false}` |
+| Controls show in production | Expected only if `enabled` was set; remove it for prod-safe defaults |
+| Duplicate React / hook errors | Ensure `react` / `react-dom` come from the app (peer deps) |
+| Share link breaks after rename | Add stable `id` props |
 
 ## When to use this library
 

@@ -1,7 +1,7 @@
 import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react";
-import dts from "vite-plugin-dts";
 import { resolve } from "path";
+import { copyFileSync } from "fs";
 
 function preserveUseClient(): Plugin {
   return {
@@ -21,27 +21,29 @@ function preserveUseClient(): Plugin {
   };
 }
 
+function copyNextTypes(): Plugin {
+  return {
+    name: "copy-next-types",
+    closeBundle() {
+      copyFileSync(
+        resolve(__dirname, "src/next-entry.d.ts"),
+        resolve(__dirname, "dist/next.d.ts")
+      );
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [
-    react(),
-    dts({
-      include: ["src/index.ts", "src/**/*.ts", "src/**/*.tsx"],
-      exclude: ["src/next.tsx"],
-      rollupTypes: true,
-      insertTypesEntry: true,
-      entryRoot: "src",
-    }),
-    preserveUseClient(),
-  ],
+  plugins: [react(), preserveUseClient(), copyNextTypes()],
   build: {
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
-      name: "variations",
+      entry: resolve(__dirname, "src/next.tsx"),
+      name: "variationsNext",
       formats: ["es", "cjs"],
-      fileName: (format) => (format === "es" ? "index.js" : "index.cjs"),
+      fileName: (format) => (format === "es" ? "next.js" : "next.cjs"),
     },
     outDir: "dist",
-    emptyOutDir: true,
+    emptyOutDir: false,
     sourcemap: true,
     rollupOptions: {
       external: [
@@ -49,6 +51,9 @@ export default defineConfig({
         "react-dom",
         "react/jsx-runtime",
         "react/jsx-dev-runtime",
+        "next",
+        "next/navigation",
+        "variations",
       ],
       output: {
         exports: "named",
